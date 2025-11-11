@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>미영의 결혼식 | 디지털 청첩장</title>
+  <meta name="description" content="따뜻한 마음을 전하는 디지털 청첩장" />
+  <!-- Open Graph for link preview -->
+  <meta property="og:title" content="미영의 결혼식에 초대합니다" />
+  <meta property="og:description" content="소중한 날 함께 해주세요" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="cover.jpg" />
+  <meta property="og:url" content="https://for-miyoung.kr" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fffaf8; --ink:#1f2937; --muted:#6b7280; --brand:#c26b5e; --soft:#f8e7e2; --card:#ffffff;
+      --radius:18px; --shadow:0 6px 18px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;}
+    a{color:inherit}
+    img{max-width:100%;display:block}
+    .wrap{max-width:720px;margin:0 auto;padding:16px}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .hero{position:relative;border-radius:var(--radius);overflow:hidden}
+    .hero img{width:100%;height:360px;object-fit:cover;filter:brightness(.9)}
+    .hero .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:24px}
+    .badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:6px 10px;border-radius:999px;font-size:12px;letter-spacing:.08em}
+    h1{margin:10px 0 0;font-size:28px;}
+    h2{margin:0;font-size:20px;color:var(--brand)}
+    .muted{color:var(--muted)}
+    .section{margin:18px 0}
+    .grid{display:grid;gap:12px}
+    .grid.two{grid-template-columns:repeat(2,1fr)}
+    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--brand);color:#fff;border:none;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow)}
+    .btn.ghost{background:#fff;color:var(--brand);border:1px solid var(--brand)}
+    .btn.full{width:100%;justify-content:center}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .pill{background:var(--soft);padding:10px 12px;border-radius:12px}
+    .kv{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:start}
+    .kv strong{display:block;color:var(--muted);font-size:13px}
+    .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,0,0,.08),transparent);margin:14px 0}
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+    .thumb{aspect-ratio:1/1;border-radius:10px;overflow:hidden;cursor:pointer}
+    .foot{text-align:center;color:var(--muted);font-size:12px;padding:24px 8px}
+    .countdown{display:flex;gap:8px;justify-content:center}
+    .chip{background:#fff;border:1px solid #eee;border-radius:10px;padding:8px 10px;min-width:58px;text-align:center}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;place-items:center;padding:16px}
+    .modal.open{display:grid}
+    .modal .box{background:#000;max-width:720px;width:100%;border-radius:12px;overflow:hidden}
+    .modal img{width:100%;height:auto}
+
+    /* Responsive */
+    @media(min-width:720px){
+      h1{font-size:36px}
+      .hero img{height:420px}
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap section">
+    <nav class="row">
+      <div class="pill">미영의 결혼식</div>
+      <div class="row" style="gap:8px">
+        <a class="btn ghost" href="#rsvp">RSVP</a>
+        <button class="btn ghost" id="shareBtn">공유</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO Cover -->
+  <section class="wrap section">
+    <div class="hero">
+      <!-- 커버 이미지 교체: cover.jpg -->
+      <img src="cover.jpg" alt="wedding cover" />
+      <div class="overlay">
+        <span class="badge">INVITATION</span>
+        <h1>미영 · (신랑 이름)</h1>
+        <p class="muted" style="margin:4px 0 12px">2025년 5월 24일 토요일 오후 1시</p>
+        <div class="countdown" id="countdown"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 인사말 & 기본 정보 -->
+  <section class="wrap section card">
+    <h2>초대합니다</h2>
+    <p class="muted">소중한 분들을 모시는 자리, 두 사람이 하나되는 순간을 함께 해주세요.</p>
+    <div class="divider"></div>
+    <div class="grid">
+      <div class="kv"><div><strong>일시</strong></div><div>2025년 5월 24일(토) 13:00</div></div>
+      <div class="kv"><div><strong>장소</strong></div><div>서울 ○○웨딩홀 3층 그랜드홀</div></div>
+      <div class="kv"><div><strong>주소</strong></div><div>서울시 ○○구 ○○로 123</div></div>
+      <div class="kv"><div><strong>연락</strong></div><div>신부 미영 010-1234-5678</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid two">
+      <button class="btn full" id="addCalendar">캘린더 저장</button>
+      <a class="btn full" href="#map">오시는 길</a>
+    </div>
+  </section>
+
+  <!-- 갤러리 -->
+  <section class="wrap section card">
+    <h2>우리의 순간</h2>
+    <div class="gallery" id="gallery">
+      <!-- 썸네일 이미지를 /images 폴더에 넣고 경로만 바꾸세요 -->
+      <div class="thumb"><img src="images/pic1.jpg" alt="pic1"></div>
+      <div class="thumb"><img src="images/pic2.jpg" alt="pic2"></div>
+      <div class="thumb"><img src="images/pic3.jpg" alt="pic3"></div>
+      <div class="thumb"><img src="images/pic4.jpg" alt="pic4"></div>
+      <div class="thumb"><img src="images/pic5.jpg" alt="pic5"></div>
+      <div class="thumb"><img src="images/pic6.jpg" alt="pic6"></div>
+    </div>
+  </section>
+
+  <!-- 일정 -->
+  <section class="wrap section card">
+    <h2>예식 안내</h2>
+    <div class="grid">
+      <div class="kv"><div><strong>오전 11:00</strong></div><div>신부 대기실 오픈</div></div>
+      <div class="kv"><div><strong>오후 12:30</strong></div><div>하객 입장</div></div>
+      <div class="kv"><div><strong>오후 1:00</strong></div><div>본식 시작</div></div>
+      <div class="kv"><div><strong>오후 2:00</strong></div><div>피로연</div></div>
+    </div>
+  </section>
+
+  <!-- 계좌 & 축하 메시지 -->
+  <section class="wrap section card">
+    <h2>마음 전하실 곳</h2>
+    <p class="muted" style="margin-top:0">직접 뵙기 어려운 분들을 위해 계좌번호를 안내드립니다.</p>
+    <div class="grid">
+      <div class="row pill">
+        <div>
+          <div style="font-weight:700">신부 미영</div>
+          <div class="muted" id="accBride">국민 123456-01-000000</div>
+        </div>
+        <button class="btn" data-copy="accBride">복사</button>
+      </div>
+      <div class="row pill">
+        <div>
+          <div style="font-weight:700">신랑 (이름)</div>
+          <div class="muted" id="accGroom">신한 110-000-000000</div>
+        </div>
+        <button class="btn" data-copy="accGroom">복사</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP -->
+  <section id="rsvp" class="wrap section card">
+    <h2>참석 의사 전달</h2>
+    <p class="muted">아래 버튼을 눌러 RSVP를 남겨주세요.</p>
+    <!-- 구글폼/티스토리/네이버폼 등 설문 URL로 교체 -->
+    <a class="btn full" href="https://forms.gle/" target="_blank" rel="noopener">RSVP 작성하기</a>
+  </section>
+
+  <!-- 지도 -->
+  <section id="map" class="wrap section card">
+    <h2>오시는 길</h2>
+    <p class="muted">대중교통 및 주차 안내를 함께 기재하세요.</p>
+    <!-- Google Maps 장소 검색 임베드. 주소/쿼리를 수정하세요. -->
+    <div style="border-radius:12px; overflow:hidden">
+      <iframe
+        src="https://www.google.com/maps?q=서울시%20강남구%20테헤란로%20123&output=embed"
+        width="100%" height="260" style="border:0" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <footer class="foot wrap">
+    <div class="divider"></div>
+    <p>함께 해주셔서 감사합니다 · 제작자: 친구</p>
+  </footer>
+
+  <!-- 이미지 라이트박스 모달 -->
+  <div class="modal" id="modal">
+    <div class="box"><img id="modalImg" src="" alt="preview"></div>
+  </div>
+
+  <script>
+    // ===== 카운트다운 (날짜 수정) =====
+    const eventDate = new Date('2025-05-24T13:00:00+09:00');
+    const $cd = document.getElementById('countdown');
+    function two(n){return (n<10? '0':'')+n}
+    function tick(){
+      const now = new Date();
+      const diff = eventDate - now;
+      if(diff <= 0){
+        $cd.innerHTML = '<span class="chip">TODAY</span>';
+        clearInterval(timer); return;
+      }
+      const d = Math.floor(diff/86400000);
+      const h = Math.floor((diff%86400000)/3600000);
+      const m = Math.floor((diff%3600000)/60000);
+      $cd.innerHTML = `
+        <span class="chip"><strong>${d}</strong><br/>일</span>
+        <span class="chip"><strong>${two(h)}</strong><br/>시간</span>
+        <span class="chip"><strong>${two(m)}</strong><br/>분</span>`
+    }
+    const timer = setInterval(tick, 1000); tick();
+
+    // ===== 이미지 라이트박스 =====
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    document.getElementById('gallery').addEventListener('click', (e)=>{
+      const t = e.target.closest('.thumb img'); if(!t) return;
+      modalImg.src = t.src; modal.classList.add('open');
+    });
+    modal.addEventListener('click', ()=> modal.classList.remove('open'));
+
+    // ===== 계좌 복사 =====
+    document.querySelectorAll('button[data-copy]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.getAttribute('data-copy');
+        const text = document.getElementById(id).textContent.trim();
+        navigator.clipboard.writeText(text).then(()=>{
+          btn.textContent = '복사됨';
+          setTimeout(()=> btn.textContent = '복사', 1000);
+        });
+      });
+    });
+
+    // ===== 캘린더(.ics) 저장 =====
+    document.getElementById('addCalendar').addEventListener('click', ()=>{
+      const dtStart = '20250524T040000Z'; // KST 13:00 == UTC 04:00
+      const dtEnd   = '20250524T060000Z'; // 2시간 후
+      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Invite//KR//KO\nBEGIN:VEVENT\nUID:${Date.now()}@invite\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z\nDTSTART:${dtStart}\nDTEND:${dtEnd}\nSUMMARY:미영의 결혼식\nLOCATION:서울 ○○웨딩홀 3층 그랜드홀\nDESCRIPTION:소중한 날 함께 해주세요\nEND:VEVENT\nEND:VCALENDAR`;
+      const blob = new Blob([ics], {type:'text/calendar'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'miyoung_wedding.ics'; a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // ===== 링크 공유 (Web Share API) =====
+    document.getElementById('shareBtn').addEventListener('click', async ()=>{
+      const data = {title: document.title, text:'미영의 결혼식에 초대합니다', url: location.href};
+      if(navigator.share){
+        try{ await navigator.share(data); }catch(e){ /* 취소 */ }
+      }else{
+        await navigator.clipboard.writeText(location.href);
+        alert('링크가 복사되었습니다');
+      }
+    });
+  </script>
+</body>
+</html>
