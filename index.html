@@ -7,14 +7,16 @@
   <meta name="description" content="따뜻한 마음을 전하는 랜선 브라이덜 샤워" />
   <!-- Open Graph for link preview -->
   <meta property="og:title" content="미영의 랜선 브라이덜 샤워에 초대합니다" />
-  <meta property="og:description" content="소중한 날 함께 해주세요" />
+  <meta property="og:description" content="소중한 응원과 함께 해주세요" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://raw.githubusercontent.com/jaunnnngs/mobileWedding/main/img/sample_1.png" />
   <meta property="og:url" content="https://jaunnnngs.github.io/mobileWedding/" />
+  <!-- 폰트 관련 -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+  
   <style>
     :root{
       --bg:#fffaf8; --ink:#1f2937; --muted:#6b7280; --brand:#ff8585; --soft:#f8e7e2; --card:#ffffff;
@@ -29,7 +31,6 @@
     .hero{position:relative;border-radius:var(--radius);overflow:hidden}
     .hero img{width:100%;height:100%;object-fit:cover;filter:brightness(.9)}
     .hero .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:24px}
-    /* .badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:90px 10px;border-radius:999px;font-size:12px;letter-spacing:.08em} */
     .badge{padding:20% 10px;}
     h1{margin:10px 0 0;font-size:28px;}
     h2{margin:0;font-size:20px;color:var(--brand)}
@@ -86,12 +87,7 @@
       }
     }
 
-	/* 특정 제목 공백 */
-	.subh2 {
-      padding-top: inherit;
-	}
-
-	/* 축하 제목 */
+	/* 인트로 필기체 제목 */
 	.english {
       font-family: "Allura", cursive;
       font-weight: auto;
@@ -103,6 +99,7 @@
       color: #ff8585;
     }
 
+    /* 댓글 목록 */
 	#comment-list {
 		display:flex;
 		flex-direction:column;
@@ -126,7 +123,7 @@
 	gap: 4px;
 	}
 
-	/* 눌렀을 때 통통 튀는 효과 */
+	/* 하트 눌렀을 때 통통 튀는 효과 */
 	.like-btn.pulse {
 	animation: heart-pop 0.35s ease-out;
 	}
@@ -159,7 +156,7 @@
 	}
 	}
 
-
+/* 사진 투표 grid */
   #photo-vote-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -320,7 +317,7 @@
       📸 아래의 웨딩 사진들은 미영이의 행복한 순간들을 담았어요.<br>
         눈에 들어오는 사진이 있다면 인생샷 투표에 한 표 남기고, 댓글로 축하도 전해주세요 ✨  
     </p>
-    <div class="gallery subh2" id="gallery">
+    <div class="gallery" id="gallery">
       <div class="thumb"><img src="img/sample_2.png" alt="pic1"></div>
       <div class="thumb"><img src="img/sample_3.png" alt="pic2"></div>
       <div class="thumb"><img src="img/sample_4.png" alt="pic3"></div>
@@ -401,6 +398,15 @@
 	<!-- 댓글 영역 -->
 	<section id="comments" class="wrap section card" style="margin-top:24px;">
 	<h2>축하 댓글 💌</h2>
+  <div id="question-hint" 
+     style="display:none; 
+            background:#ffefef; 
+            padding:12px 10px; 
+            border-radius:10px; 
+            color:#7a4b58; 
+            margin-bottom:10px; 
+            font-size:0.9rem;">
+</div>
 	<div id="comment-list"></div>
 	<form id="comment-form" style="display:flex;gap:8px;flex-wrap:wrap;">
 		<input id="comment-nick" placeholder="이름"
@@ -420,10 +426,10 @@
 
   <!-- RSVP -->
   <section id="rsvp" class="wrap section card">
-    <h2>참석 의사 전달</h2>
-    <p class="muted">아래 버튼을 눌러 RSVP를 남겨주세요.</p>
+    <h2>청첩장 모임 의견 전달</h2>
+    <p class="muted">아래 버튼을 눌러 의견을 남겨주세요.</p>
     <!-- 구글폼/티스토리/네이버폼 등 설문 URL로 교체 -->
-    <a class="btn full" href="https://forms.gle/" target="_blank" rel="noopener">RSVP 작성하기</a>
+    <a class="btn full" href="https://forms.gle/" target="_blank" rel="noopener">의견 작성하기</a>
   </section>
 
   <!-- 지도 -->
@@ -433,7 +439,7 @@
     <!-- Google Maps 장소 검색 임베드. 주소/쿼리를 수정하세요. -->
     <div style="border-radius:12px; overflow:hidden">
       <iframe
-        src="https://www.google.com/maps?q=서울시%20강남구%20테헤란로%20123&output=embed"
+        src="https://www.google.com/maps?q=대구시%20수성구%20동대구로%20&output=embed"
         width="100%" height="260" style="border:0" allowfullscreen="" loading="lazy"></iframe>
     </div>
   </section>
@@ -441,7 +447,7 @@
   <footer class="foot wrap">
     <div class="divider"></div>
     <p>끝까지 봐주셔서 감사합니다 · 제작자: 친구</p>
-    <p>이 축하장은 축하하는 마음에 개인이 작성한 축하장입니다. 자세한 내용은 청첩장으로 확인하세요</p>
+    <p>이 축하장은 축하하는 마음에 개인이 작성한 축하장입니다.<br/>결혼식관련 자세한 내용은 청첩장으로 확인하세요</p>
   </footer>
 
   <!-- 이미지 라이트박스 모달 -->
@@ -503,36 +509,12 @@
       a.href = url; a.download = 'miyoung_wedding.ics'; a.click();
       URL.revokeObjectURL(url);
     });
-
-    // ===== 링크 공유 (Web Share API) =====
-    document.getElementById('shareBtn').addEventListener('click', async ()=>{
-      const data = {title: document.title, text:'미영의 랜선 브라이덜 샤워에 초대합니다', url: location.href};
-      if(navigator.share){
-        try{ await navigator.share(data); }catch(e){ /* 취소 */ }
-      }else{
-        await navigator.clipboard.writeText(location.href);
-        alert('링크가 복사되었습니다');
-      }
-    });
-
-	// 🌸 Flower petal animation
-    const numPetals = 25;
-    for (let i = 0; i < numPetals; i++) {
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = 5 + Math.random() * 5 + 's';
-      petal.style.animationDelay = Math.random() * 5 + 's';
-      petal.style.width = 12 + Math.random() * 16 + 'px';
-      petal.style.height = petal.style.width;
-      document.body.appendChild(petal);
-    }
 	</script>
+
 	<!-- Supabase JS -->
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-	<script
+	<script>
 	// ==== 1) 댓글 설정값 ====
-	<!-- const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";   // ← 교체 -->
 	const SUPABASE_URL = "https://tyevryexhncxfubnkjoe.supabase.co";   // ← 교체
 	const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5ZXZyeWV4aG5jeGZ1Ym5ram9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMTE3MDgsImV4cCI6MjA3ODU4NzcwOH0.Z635FtXmHkWu_FxnZI3eJy_e3cZZ05KErw1i4-JlejU";          // ← 교체
 	const PAGE_ID = "miyoung_wedding";                         // 페이지 식별자
@@ -843,18 +825,20 @@ document.addEventListener("click", async (e) => {
 	setTimeout(() => petal.remove(), 1000);
 	}
 
-	btn.addEventListener("click", () => {
-		// 박스 흔들리는 연출
-		box.style.transform = "scale(0.95)";
-		setTimeout(() => (box.style.transform = "scale(1)"), 120);
+  let currentQuestion = "";  // 전역 변수
 
-		// 꽃잎 효과
-		animatePetal();
+  btn.addEventListener("click", () => {
+    box.style.transform = "scale(0.95)";
+    setTimeout(() => (box.style.transform = "scale(1)"), 120);
 
-		// 질문 바꾸기
-		box.textContent = getRandomQuestion();
-	});
+    animatePetal();
 
+    currentQuestion = getRandomQuestion();   // ⭐ 저장
+    box.textContent = currentQuestion;
+
+    showQuestionCommentHint();               // ⭐ 안내 표시 함수 실행
+  });
+  
 	// 꽃잎 애니메이션 스타일
 	const style = document.createElement("style");
 	style.textContent = `
@@ -864,6 +848,46 @@ document.addEventListener("click", async (e) => {
 		}
 	`;
 	document.head.appendChild(style);
+
+
+  function showQuestionCommentHint() {
+  const hint = document.getElementById("question-hint");
+  hint.style.display = "block";
+  hint.innerHTML = `
+    🌸 <b>오늘의 질문:</b> ${currentQuestion}<br>
+    아래 댓글로 당신의 답변을 남겨주세요! 💕
+  `;
+
+  // 댓글창 자동 포커스
+  document.getElementById("comment-body").focus();
+
+  // 질문이 댓글 입력창의 기본 내용이 되게
+  document.getElementById("comment-body").value = `[Q] ${currentQuestion} — `;
+}
+
+   // ===== 링크 공유 (Web Share API) =====
+    document.getElementById('shareBtn').addEventListener('click', async ()=>{
+      const data = {title: document.title, text:'미영의 랜선 브라이덜 샤워에 초대합니다', url: location.href};
+      if(navigator.share){
+        try{ await navigator.share(data); }catch(e){ /* 취소 */ }
+      }else{
+        await navigator.clipboard.writeText(location.href);
+        alert('링크가 복사되었습니다');
+      }
+    });
+
+	// 🌸 Flower petal animation
+    const numPetals = 25;
+    for (let i = 0; i < numPetals; i++) {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDuration = 5 + Math.random() * 5 + 's';
+      petal.style.animationDelay = Math.random() * 5 + 's';
+      petal.style.width = 12 + Math.random() * 16 + 'px';
+      petal.style.height = petal.style.width;
+      document.body.appendChild(petal);
+    }
 	</script>
 
 </body>
