@@ -243,6 +243,7 @@
 
   </style>
 </head>
+
 <body>
   <header class="wrap section">
     <nav class="row">
@@ -359,41 +360,100 @@
 </section>
 
   	<!-- 질문 카드 영역 -->
-	<section class="wrap section card" id="qna-card" style="text-align:center;margin-top:30px;">
-	<h2>💕 오늘의 질문 카드</h2>
-	
-	<div id="question-box" 
-		style="
-			background:#ff85852a;
-			border-radius:16px;
-			padding:26px 20px;
-			margin-top:14px;
-			min-height:90px;
-			display:flex;
-			justify-content:center;
-			align-items:center;
-			font-size:1.05rem;
-			color:#7d4a58;
-			box-shadow:0 4px 12px rgba(0,0,0,0.06);
-			transition:0.25s ease;
-			">
-		👉 버튼을 눌러 질문을 뽑아보세요!
-	</div>
+	<!-- 질문 카드 + 답변 입력 영역 -->
+<section class="wrap section card" id="qna-card" style="text-align:center;margin-top:30px;">
+  <h2>💕 오늘의 질문 카드</h2>
 
-	<button id="draw-question" 
-		style="
-		margin-top:16px;
-		padding:12px 20px;
-		border:none;
-		border-radius:12px;
-		background:#ff8585;
-		color:white;
-		font-weight:600;
-		cursor:pointer;">
-		질문 뽑기 🌸
-	</button>
-	</section>
+  <!-- 질문 카드 -->
+  <div id="question-box" 
+       style="
+        background:#ff85852a;
+        border-radius:16px;
+        padding:26px 20px;
+        margin-top:14px;
+        min-height:90px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-size:1.05rem;
+        color:#7d4a58;
+        box-shadow:0 4px 12px rgba(0,0,0,0.06);
+        transition:0.25s ease;
+       ">
+    👉 버튼을 눌러 질문을 뽑아보세요!
+  </div>
 
+  <!-- 질문 뽑기 버튼 -->
+  <button id="draw-question" 
+          style="
+            margin-top:16px;
+            padding:12px 20px;
+            border:none;
+            border-radius:12px;
+            background:#ff8585;
+            color:white;
+            font-weight:600;
+            cursor:pointer;">
+    질문 뽑기 🌸
+  </button>
+
+  <!-- ↓↓↓ 질문에 대한 답변 입력 영역 (질문 뽑은 뒤에만 보이게) -->
+  <div id="qna-answer-area" 
+       style="
+        margin-top:18px;
+        padding:14px 12px;
+        border-radius:12px;
+        background:#fff7fa;
+        text-align:left;
+        display:none;
+       ">
+    <p style="margin:0 0 8px 0; font-size:0.9rem; color:#7d4a58;">
+      <b>이 질문에 대한 나의 답변을 남겨주세요 💬</b>
+    </p>
+
+    <!-- 현재 질문 텍스트 간단 표시 -->
+    <p id="qna-current-question-text" 
+       style="margin:0 0 10px 0; font-size:0.85rem; color:#9c7080;">
+      <!-- JS에서 채워줌 -->
+    </p>
+
+    <!-- 답변 입력 폼 -->
+    <form id="qna-form" style="display:flex;flex-wrap:wrap;gap:8px;">
+      <input id="qna-nick" placeholder="이름"
+             style="flex:0 0 140px;padding:10px;border-radius:10px;border:1px solid #ddd">
+      <input id="qna-body" placeholder="이 질문에 대한 내 답변을 적어주세요"
+             style="flex:1 1 180px;padding:10px;border-radius:10px;border:1px solid #ddd">
+      <button style="
+        padding:10px 16px;
+        border-radius:10px;
+        border:none;
+        background:#ff8585;
+        color:#fff;
+        font-weight:600;
+        cursor:pointer;">
+        답변 보내기
+      </button>
+    </form>
+
+    <!-- 질문별 답변 모아보기 버튼 -->
+    <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+      <span id="qna-answer-count" style="font-size:0.8rem;color:#9c7080;">
+        아직 이 질문에 대한 답변이 없어요.
+      </span>
+      <button id="qna-view-answers"
+              style="
+                padding:8px 12px;
+                border-radius:999px;
+                border:1px solid #ffb3c8;
+                background:#fff;
+                font-size:0.8rem;
+                color:#ff658a;
+                cursor:pointer;">
+        이 질문에 달린 답변 모아보기 👀
+      </button>
+    </div>
+  </div>
+</section>
 
 	<!-- 댓글 영역 -->
 	<section id="comments" class="wrap section card" style="margin-top:24px;">
@@ -455,38 +515,79 @@
     <div class="box"><img id="modalImg" src="" alt="preview"></div>
   </div>
 
-  <script>
-    // ===== 카운트다운 (날짜 수정) =====
-    const eventDate = new Date('2026-03-14T13:00:00+09:00');
-    const $cd = document.getElementById('countdown');
-    function two(n){return (n<10? '0':'')+n}
-    function tick(){
-      const now = new Date();
-      const diff = eventDate - now;
-      if(diff <= 0){
-        $cd.innerHTML = '<span class="chip">TODAY</span>';
-        clearInterval(timer); return;
-      }
-      const d = Math.floor(diff/86400000);
-      const h = Math.floor((diff%86400000)/3600000);
-      const m = Math.floor((diff%3600000)/60000);
-      $cd.innerHTML = `
-        <span class="chip"><strong>${d}</strong><br/>일</span>
-        <span class="chip"><strong>${two(h)}</strong><br/>시간</span>
-        <span class="chip"><strong>${two(m)}</strong><br/>분</span>`
+
+  <!-- ✅ 1. 상단 카운트다운/공유 스크립트 (첫 번째 <script>) -->
+<script>
+  // ===== 카운트다운 (날짜 수정) =====
+  const eventDate = new Date('2026-03-14T13:00:00+09:00');
+  const $cd = document.getElementById('countdown');
+  function two(n){return (n<10? '0':'')+n}
+  function tick(){
+    const now = new Date();
+    const diff = eventDate - now;
+    if(diff <= 0){
+      $cd.innerHTML = '<span class="chip">TODAY</span>';
+      clearInterval(timer); return;
     }
-    const timer = setInterval(tick, 1000); tick();
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    $cd.innerHTML = `
+      <span class="chip"><strong>${d}</strong><br/>일</span>
+      <span class="chip"><strong>${two(h)}</strong><br/>시간</span>
+      <span class="chip"><strong>${two(m)}</strong><br/>분</span>`
+  }
+  const timer = setInterval(tick, 1000); tick();
 
-    // ===== 이미지 라이트박스 =====
-    const modal = document.getElementById('modal');
-    const modalImg = document.getElementById('modalImg');
-    document.getElementById('gallery').addEventListener('click', (e)=>{
-      const t = e.target.closest('.thumb img'); if(!t) return;
-      modalImg.src = t.src; modal.classList.add('open');
+  // ===== 이미지 라이트박스 =====
+  const modal = document.getElementById('modal');
+  const modalImg = document.getElementById('modalImg');
+  document.getElementById('gallery').addEventListener('click', (e)=>{
+    const t = e.target.closest('.thumb img'); if(!t) return;
+    modalImg.src = t.src; modal.classList.add('open');
+  });
+  modal.addEventListener('click', ()=> modal.classList.remove('open'));
+
+  // ===== (현재는 사용 안 함) 캘린더(.ics) 저장 - 버튼 있으면만 동작 =====
+  const addCalBtn = document.getElementById('addCalendar');
+  if(addCalBtn){
+    addCalBtn.addEventListener('click', ()=>{
+      const dtStart = '20260314T040000Z'; // KST 13:00 == UTC 04:00
+      const dtEnd   = '20260314T060000Z'; // 2시간 후
+      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Invite//KR//KO\nBEGIN:VEVENT\nUID:${Date.now()}@invite\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z\nDTSTART:${dtStart}\nDTEND:${dtEnd}\nSUMMARY:미영의 결혼식\nLOCATION:서울 ○○웨딩홀 3층 그랜드홀\nDESCRIPTION:소중한 날 함께 해주세요\nEND:VEVENT\nEND:VCALENDAR`;
+      const blob = new Blob([ics], {type:'text/calendar'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'miyoung_wedding.ics'; a.click();
+      URL.revokeObjectURL(url);
     });
-    modal.addEventListener('click', ()=> modal.classList.remove('open'));
+  }
 
-    // ===== 계좌 복사 =====
+  // ===== 링크 공유 (Web Share API) =====
+  document.getElementById('shareBtn').addEventListener('click', async ()=>{
+    const data = {title: document.title, text:'미영의 랜선 브라이덜 샤워에 초대합니다', url: location.href};
+    if(navigator.share){
+      try{ await navigator.share(data); }catch(e){ /* 취소 */ }
+    }else{
+      await navigator.clipboard.writeText(location.href);
+      alert('링크가 복사되었습니다');
+    }
+  });
+
+  // 🌸 배경 꽃잎 애니메이션
+  const numPetals = 25;
+  for (let i = 0; i < numPetals; i++) {
+    const petal = document.createElement('div');
+    petal.classList.add('petal');
+    petal.style.left = Math.random() * 100 + 'vw';
+    petal.style.animationDuration = 5 + Math.random() * 5 + 's';
+    petal.style.animationDelay = Math.random() * 5 + 's';
+    petal.style.width = 12 + Math.random() * 16 + 'px';
+    petal.style.height = petal.style.width;
+    document.body.appendChild(petal);
+  }
+
+  // ===== 계좌 복사 =====
     document.querySelectorAll('button[data-copy]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const id = btn.getAttribute('data-copy');
@@ -509,23 +610,32 @@
       a.href = url; a.download = 'miyoung_wedding.ics'; a.click();
       URL.revokeObjectURL(url);
     });
-	</script>
+</script>
 
-	<!-- Supabase JS -->
-	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-	<script>
-	// ==== 1) 댓글 설정값 ====
-	const SUPABASE_URL = "https://tyevryexhncxfubnkjoe.supabase.co";   // ← 교체
-	const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5ZXZyeWV4aG5jeGZ1Ym5ram9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMTE3MDgsImV4cCI6MjA3ODU4NzcwOH0.Z635FtXmHkWu_FxnZI3eJy_e3cZZ05KErw1i4-JlejU";          // ← 교체
-	const PAGE_ID = "miyoung_wedding";                         // 페이지 식별자
 
-	const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-	const $list = document.getElementById("comment-list");
-	const $form = document.getElementById("comment-form");
-	const $nick = document.getElementById("comment-nick");
-	const $body = document.getElementById("comment-body");
-  
-  // ==== 인생샷 투표용 사진 목록 ====
+<!-- ✅ 2. Supabase + 댓글 + 인생샷 + 질문카드 + Q&A저장 (두 번째 <script>) -->
+
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  // ==== 1) Supabase 설정값 ====
+  const SUPABASE_URL = "https://tyevryexhncxfubnkjoe.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5ZXZyeWV4aG5jeGZ1Ym5ram9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMTE3MDgsImV4cCI6MjA3ODU4NzcwOH0.Z635FtXmHkWu_FxnZI3eJy_e3cZZ05KErw1i4-JlejU";
+  const PAGE_ID = "miyoung_wedding";
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const $list = document.getElementById("comment-list");
+  const $form = document.getElementById("comment-form");
+  const $nick = document.getElementById("comment-nick");
+  const $body = document.getElementById("comment-body");
+
+  // HTML 특수문자 이스케이프
+  const esc = s => (s || "").replace(/[&<>\"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
+  );
+
+  // ==== 2) 인생샷 투표용 사진 목록 ====
   const photosForVote = [
     { id: "shot1", src: "img/sample_2.png", label: "인생샷 1" },
     { id: "shot2", src: "img/sample_3.png", label: "인생샷 2" },
@@ -533,20 +643,15 @@
     { id: "shot4", src: "img/sample_5.png", label: "인생샷 4" },
     { id: "shot5", src: "img/sample_6.png", label: "인생샷 5" },
     { id: "shot6", src: "img/sample_7.png", label: "인생샷 6" },
-    // 필요하면 추가로 더...
   ];
 
   const $photoGrid = document.getElementById("photo-vote-grid");
-
-	const esc = s => s.replace(/[&<>\"']/g, c =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
-	);
+  let photoVoteRows = []; // 인생샷 투표 데이터 캐시
 
   function renderPhotoVotes(rows) {
     if (!$photoGrid) return;
     $photoGrid.innerHTML = "";
 
-    // 1등 득표수 찾기 (0표면 왕관 없음)
     const maxVotes = rows.reduce(
       (max, r) => Math.max(max, r.votes || 0),
       0
@@ -556,7 +661,7 @@
       const row = rows.find(r => r.photo_id === photo.id) || { votes: 0 };
       const votes = row.votes || 0;
       const voted = localStorage.getItem(`photo_voted_${photo.id}`) === "1";
-      const isTop = maxVotes > 0 && votes === maxVotes; // 👑 달릴 대상인지
+      const isTop = maxVotes > 0 && votes === maxVotes;
 
       const card = document.createElement("div");
       card.className = "vote-thumb";
@@ -581,196 +686,7 @@
     });
   }
 
-	function renderComment(item) {
-		const el = document.createElement("div");
-		el.className = "comment-card";
-		el.style.cssText = `
-		background:#fff; padding:12px 14px; border-radius:12px; 
-		border:1px solid #eee; position:relative;
-		`;
-
-		el.innerHTML = `
-		<b>${esc(item.nickname)}</b>
-		<span style="color:#999;font-size:12px;margin-left:6px;">
-			${new Date(item.created_at).toLocaleString()}
-		</span>
-		<div style="margin-top:6px">${esc(item.body)}</div>
-
-		<button class="like-btn" data-id="${item.id}"
-			style="
-			position:absolute; right:12px; bottom:12px;
-			background:none; border:none; cursor:pointer;
-			font-size:18px; color:#f37a9e;">
-			❤️ <span>${item.likes || 0}</span>
-		</button>
-		`;
-
-		$list.append(el);
-	}
-
- // 1) 댓글 초기 불러오기
-  (async () => {
-    const { data } = await sb
-      .from("comments")
-      .select("*")
-      .eq("page_id", PAGE_ID)
-      .order("created_at");
-
-    data.forEach(renderComment);
-  })();
-
-  // 2) 실시간 INSERT + UPDATE(좋아요 반영)
-  sb.channel("realtime-comments")
-  .on(
-    "postgres_changes",
-    { event: "*", schema: "public", table: "comments", filter: `page_id=eq.${PAGE_ID}` },
-    (payload) => {
-      if (payload.eventType === "INSERT") {
-        renderComment(payload.new);
-		// $list.scrollTop = $list.scrollHeight; // ← 여기 추가!
-		$list.scrollTo({ top: $list.scrollHeight, behavior: "smooth" });
-
-
-      }
-      if (payload.eventType === "UPDATE") {
-        const btn = document.querySelector(
-          `button.like-btn[data-id="${payload.new.id}"]`
-        );
-        if (btn) {
-          const span = btn.querySelector("span");
-          if (span) span.textContent = payload.new.likes;
-        }
-      }
-    }
-  )
-  .subscribe();
-
-
-document.addEventListener("click", async (e) => {
-  const target = e.target.closest(".photo-vote-btn, .vote-thumb");
-  if (!target) return;
-
-  const card = target.classList.contains("vote-thumb")
-    ? target
-    : target.closest(".vote-thumb");
-  if (!card) return;
-
-  const photoId = card.dataset.photoId;
-  if (!photoId) return;
-
-  const btn = card.querySelector(".photo-vote-btn");
-  const span = btn.querySelector("span");
-  const key = `photo_voted_${photoId}`;
-
-  const current = parseInt(span.textContent || "0", 10);
-  const alreadyVoted = localStorage.getItem(key) === "1";
-
-  let next = current;
-  if (alreadyVoted) {
-    next = Math.max(current - 1, 0);
-    span.textContent = next;
-    btn.classList.remove("voted");
-    localStorage.removeItem(key);
-  } else {
-    next = current + 1;
-    span.textContent = next;
-    btn.classList.add("voted");
-    localStorage.setItem(key, "1");
-  }
-
-  const { error } = await sb
-    .from("photo_votes")
-    .update({ votes: next })
-    .eq("page_id", PAGE_ID)
-    .eq("photo_id", photoId);
-
-  if (error) {
-    console.error(error);
-    alert("투표 반영 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.");
-    // 롤백
-    span.textContent = current;
-    if (alreadyVoted) {
-      btn.classList.add("voted");
-      localStorage.setItem(key, "1");
-    } else {
-      btn.classList.remove("voted");
-      localStorage.removeItem(key);
-    }
-    return;
-  }
-
-  // ✅ 투표 반영 성공 → 최신 데이터로 왕관 재계산
-  const { data } = await sb
-    .from("photo_votes")
-    .select("*")
-    .eq("page_id", PAGE_ID);
-
-  renderPhotoVotes(data || []);
-});
-
-	// 3) 좋아요 버튼 클릭 → likes +1
-	document.addEventListener("click", async (e) => {
-	const btn = e.target.closest(".like-btn");
-	if (!btn) return;
-
-	const id = btn.dataset.id;
-
-	// 1) 애니메이션 효과: 통통 튀기
-	btn.classList.remove("pulse");
-	void btn.offsetWidth;           // 강제 리플로우로 애니메이션 재시작
-	btn.classList.add("pulse");
-
-	// 2) 위로 날아가는 작은 하트 추가
-	const flying = document.createElement("span");
-	flying.className = "flying-heart";
-	flying.textContent = "❤";
-	btn.appendChild(flying);
-	setTimeout(() => flying.remove(), 800);
-
-	// 3) Supabase에서 현재 likes 값 가져와서 +1
-	const { data, error } = await sb
-		.from("comments")
-		.select("likes")
-		.eq("id", id)
-		.single();
-
-	if (error) {
-		console.error(error);
-		return;
-	}
-
-	await sb
-		.from("comments")
-		.update({ likes: (data.likes || 0) + 1 })
-		.eq("id", id);
-
-	// 실제 숫자 반영은 실시간 UPDATE 이벤트에서 처리됨
-	});
-
-
-	// ==== 4) 댓글 전송 ====
-	$form.addEventListener("submit", async (e) => {
-	e.preventDefault();
-	const nickname = ($nick.value || "Guest").slice(0, 24);
-	const body = ($body.value || "").trim();
-	if (!body) return;
-
-	// 입력창만 먼저 비우고
-	$nick.value = "";
-	$body.value = "";
-
-	// DB에만 저장 → 화면 추가는 실시간 INSERT 이벤트에서 처리
-	const { error } = await sb
-		.from("comments")
-		.insert({ page_id: PAGE_ID, nickname, body });
-
-	if (error) {
-		console.error(error);
-		alert("댓글 저장 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.");
-	}
-	});
-
-    // ==== 인생샷 투표 데이터 초기 로드 ====
+  // 초기 인생샷 투표 데이터 로드
   (async () => {
     if (!$photoGrid) return;
     const { data, error } = await sb
@@ -782,113 +698,411 @@ document.addEventListener("click", async (e) => {
       console.error(error);
       return;
     }
-    renderPhotoVotes(data || []);
+    photoVoteRows = data || [];
+    renderPhotoVotes(photoVoteRows);
   })();
 
-	// 질문목록
-	const questions = [
-		"신부와 함께한 가장 기억에 남는 순간은?",
-		"둘이 정말 잘 맞는다고 느낀 이유는 무엇인가요?",
-		"신부에게 한마디 축하 메시지를 남긴다면?",
-		"둘의 첫인상은 어땠나요?",
-		"신부의 가장 귀여운 점은 무엇인가요?",
-		"둘이 오래오래 잘 살 것 같다고 느꼈던 순간은?",
-		"신부와 함께 가고 싶은 여행지는?",
-		"둘의 러브스토리 중 가장 좋아하는 장면은?",
-		"신부에게 나만 아는 TMI 한 가지!",
-		"두 사람을 보며 떠오르는 노래는?"
-	];
 
-	const box = document.getElementById("question-box");
-	const btn = document.getElementById("draw-question");
+  // ==== 3) 댓글 렌더링 ====
+  function renderComment(item) {
+    const el = document.createElement("div");
+    el.className = "comment-card";
+    el.style.cssText = `
+      background:#fff; padding:12px 14px; border-radius:12px; 
+      border:1px solid #eee; position:relative;
+    `;
 
-	function getRandomQuestion() {
-		return questions[Math.floor(Math.random() * questions.length)];
-	}
+    el.innerHTML = `
+      <b>${esc(item.nickname)}</b>
+      <span style="color:#999;font-size:12px;margin-left:6px;">
+        ${item.created_at ? new Date(item.created_at).toLocaleString() : ""}
+      </span>
+      <div style="margin-top:6px">${esc(item.body)}</div>
 
-	function animatePetal() {
-	const boxRect = box.getBoundingClientRect();  
-	// box: 질문 박스 DOM
+      <button class="like-btn" data-id="${item.id}"
+        style="
+          position:absolute; right:12px; bottom:12px;
+          background:none; border:none; cursor:pointer;
+          font-size:18px; color:#f37a9e;">
+        ❤️ <span>${item.likes || 0}</span>
+      </button>
+    `;
 
-	const petal = document.createElement("span");
-	petal.textContent = "🌸";
-	petal.style.cssText = `
-		position: fixed;
-		left: ${boxRect.left + boxRect.width / 2}px;
-		top: ${boxRect.bottom - 20}px;
-		font-size: 26px;
-		pointer-events: none;
-		z-index: 9999;
-		animation: qna-petal-fly 1s ease-out forwards;
-	`;
-	document.body.appendChild(petal);
-	setTimeout(() => petal.remove(), 1000);
-	}
+    $list.append(el);
+  }
 
-  let currentQuestion = "";  // 전역 변수
+  // 댓글 초기 불러오기
+  (async () => {
+    const { data, error } = await sb
+      .from("comments")
+      .select("*")
+      .eq("page_id", PAGE_ID)
+      .eq("kind", "message")            // 댓글만 조회
+      .order("created_at");
 
-  btn.addEventListener("click", () => {
-    box.style.transform = "scale(0.95)";
-    setTimeout(() => (box.style.transform = "scale(1)"), 120);
+    if (error) {
+      console.error(error);
+      return;
+    }
 
-    animatePetal();
+    (data || []).forEach(renderComment);
+  })();
 
-    currentQuestion = getRandomQuestion();   // ⭐ 저장
-    box.textContent = currentQuestion;
+  // 댓글 실시간 반영 + 좋아요 실시간 반영
+  sb.channel("realtime-comments")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "comments", filter: `page_id=eq.${PAGE_ID}` },
+      (payload) => {
+        if (payload.eventType === "INSERT") {
+          if (payload.new.kind !== "message") return;
 
-    showQuestionCommentHint();               // ⭐ 안내 표시 함수 실행
+          renderComment(payload.new);
+          $list.scrollTo({ top: $list.scrollHeight, behavior: "smooth" });
+        }
+        if (payload.eventType === "UPDATE") {
+          const btn = document.querySelector(
+            `button.like-btn[data-id="${payload.new.id}"]`
+          );
+          if (btn) {
+            const span = btn.querySelector("span");
+            if (span) span.textContent = payload.new.likes;
+          }
+        }
+      }
+    )
+    .subscribe();
+
+  // ==== 4) 일반 축하 댓글 전송 ====
+  $form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nickname = ($nick.value || "Guest").slice(0, 24);
+    const body = ($body.value || "").trim();
+    if (!body) return;
+
+    $nick.value = "";
+    $body.value = "";
+
+    const { error } = await sb
+      .from("comments")
+      .insert({ page_id: PAGE_ID, nickname, body, kind: "message" });
+
+    if (error) {
+      console.error(error);
+      alert("댓글 저장 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.");
+    }
   });
-  
-	// 꽃잎 애니메이션 스타일
-	const style = document.createElement("style");
-	style.textContent = `
-		@keyframes qna-petal-fly {
-		0%   { opacity:1; transform:translate(-50%, -50%) scale(1); }
-		100% { opacity:0; transform:translate(-50%, -120px) scale(1.4); }
-		}
-	`;
-	document.head.appendChild(style);
+
+  // ==== 5) 인생샷 투표 (토글 + 왕관 갱신) ====
+  document.addEventListener("click", async (e) => {
+    const target = e.target.closest(".photo-vote-btn, .vote-thumb");
+    if (!target) return;
+
+    const card = target.classList.contains("vote-thumb")
+      ? target
+      : target.closest(".vote-thumb");
+    if (!card) return;
+
+    const photoId = card.dataset.photoId;
+    if (!photoId) return;
+
+    const btn = card.querySelector(".photo-vote-btn");
+    const span = btn.querySelector("span");
+    const key = `photo_voted_${photoId}`;
+
+    const current = parseInt(span.textContent || "0", 10);
+    const alreadyVoted = localStorage.getItem(key) === "1";
+
+    let next = current;
+    if (alreadyVoted) {
+      next = Math.max(current - 1, 0);
+      span.textContent = next;
+      btn.classList.remove("voted");
+      localStorage.removeItem(key);
+    } else {
+      next = current + 1;
+      span.textContent = next;
+      btn.classList.add("voted");
+      localStorage.setItem(key, "1");
+    }
+
+    const { error } = await sb
+      .from("photo_votes")
+      .update({ votes: next })
+      .eq("page_id", PAGE_ID)
+      .eq("photo_id", photoId);
+
+    if (error) {
+      console.error(error);
+      alert("투표 반영 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.");
+      // 롤백
+      span.textContent = current;
+      if (alreadyVoted) {
+        btn.classList.add("voted");
+        localStorage.setItem(key, "1");
+      } else {
+        btn.classList.remove("voted");
+        localStorage.removeItem(key);
+      }
+      return;
+    }
+
+    // 캐시 업데이트 + 재렌더 → 왕관 움직임
+    const idx = photoVoteRows.findIndex(r => r.photo_id === photoId);
+    if (idx !== -1) {
+      photoVoteRows[idx] = { ...photoVoteRows[idx], votes: next };
+    } else {
+      photoVoteRows.push({ page_id: PAGE_ID, photo_id: photoId, votes: next });
+    }
+    renderPhotoVotes(photoVoteRows);
+  });
+
+  // ==== 6) 댓글 좋아요 기능 ====
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".like-btn");
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+
+    btn.classList.remove("pulse");
+    void btn.offsetWidth;
+    btn.classList.add("pulse");
+
+    const flying = document.createElement("span");
+    flying.className = "flying-heart";
+    flying.textContent = "❤";
+    btn.appendChild(flying);
+    setTimeout(() => flying.remove(), 800);
+
+    const { data, error } = await sb
+      .from("comments")
+      .select("likes")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    await sb
+      .from("comments")
+      .update({ likes: (data.likes || 0) + 1 })
+      .eq("id", id);
+  });
 
 
-  function showQuestionCommentHint() {
-  const hint = document.getElementById("question-hint");
-  hint.style.display = "block";
-  hint.innerHTML = `
-    🌸 <b>오늘의 질문:</b> ${currentQuestion}<br>
-    아래 댓글로 당신의 답변을 남겨주세요! 💕
-  `;
+  // ==== 7) 질문/답변 Q&A 영역 ====
+  const questions = [
+    "신부와 함께한 가장 기억에 남는 순간은?",
+    "둘이 정말 잘 맞는다고 느낀 이유는 무엇인가요?",
+    "신부에게 한마디 축하 메시지를 남긴다면?",
+    "둘의 첫인상은 어땠나요?",
+    "신부의 가장 귀여운 점은 무엇인가요?",
+    "둘이 오래오래 잘 살 것 같다고 느꼈던 순간은?",
+    "신부와 함께 가고 싶은 여행지는?",
+    "둘의 러브스토리 중 가장 좋아하는 장면은?",
+    "신부에게 나만 아는 TMI 한 가지!",
+    "두 사람을 보며 떠오르는 노래는?"
+  ];
+  function getRandomQuestionIndex() {
+    return Math.floor(Math.random() * questions.length);
+  }
 
-  // 댓글창 자동 포커스
-  document.getElementById("comment-body").focus();
+  let currentQuestionIndex = null;
+  const qBox = document.getElementById("question-box");
+  const qBtn = document.getElementById("draw-question");
+  const qnaArea = document.getElementById("qna-answer-area");
+  const qnaQuestionText = document.getElementById("qna-current-question-text");
+  const qnaForm = document.getElementById("qna-form");
+  const qnaNick = document.getElementById("qna-nick");
+  const qnaBody = document.getElementById("qna-body");
+  const qnaAnswerCount = document.getElementById("qna-answer-count");
 
-  // 질문이 댓글 입력창의 기본 내용이 되게
-  document.getElementById("comment-body").value = `[Q] ${currentQuestion} — `;
-}
+  let qaCounts = window.qaCounts || {};
+  window.qaCounts = qaCounts;
 
-   // ===== 링크 공유 (Web Share API) =====
-    document.getElementById('shareBtn').addEventListener('click', async ()=>{
-      const data = {title: document.title, text:'미영의 랜선 브라이덜 샤워에 초대합니다', url: location.href};
-      if(navigator.share){
-        try{ await navigator.share(data); }catch(e){ /* 취소 */ }
-      }else{
-        await navigator.clipboard.writeText(location.href);
-        alert('링크가 복사되었습니다');
+  function animatePetal() {
+    const boxRect = qBox.getBoundingClientRect();
+    const petal = document.createElement("span");
+    petal.textContent = "🌸";
+    petal.style.cssText = `
+      position: fixed;
+      left: ${boxRect.left + boxRect.width / 2}px;
+      top: ${boxRect.bottom - 20}px;
+      font-size: 26px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: qna-petal-fly 1s ease-out forwards;
+    `;
+    document.body.appendChild(petal);
+    setTimeout(() => petal.remove(), 1000);
+  }
+
+  // 질문 뽑기 버튼
+  if (qBtn) {
+    qBtn.addEventListener("click", () => {
+      qBox.style.transform = "scale(0.95)";
+      setTimeout(() => (qBox.style.transform = "scale(1)"), 120);
+
+      animatePetal();
+
+      const idx = getRandomQuestionIndex();
+      currentQuestionIndex = idx;
+      const qText = questions[idx];
+
+      qBox.textContent = qText;
+
+      qnaArea.style.display = "block";
+      qnaQuestionText.textContent = `Q. ${qText}`;
+
+      qnaBody.focus();
+
+      const count = qaCounts[idx] || 0;
+      if (count > 0) {
+        qnaAnswerCount.textContent = `이 질문에 달린 답변 ${count}개가 있어요 ✨`;
+      } else {
+        qnaAnswerCount.textContent = "아직 이 질문에 대한 첫 번째 답변을 기다리고 있어요 🌸";
       }
     });
+  }
 
-	// 🌸 Flower petal animation
-    const numPetals = 25;
-    for (let i = 0; i < numPetals; i++) {
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = 5 + Math.random() * 5 + 's';
-      petal.style.animationDelay = Math.random() * 5 + 's';
-      petal.style.width = 12 + Math.random() * 16 + 'px';
-      petal.style.height = petal.style.width;
-      document.body.appendChild(petal);
+  // 질문에 대한 답변 저장
+  if (qnaForm) {
+    qnaForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (currentQuestionIndex === null || typeof currentQuestionIndex !== "number") {
+        alert("먼저 질문 카드를 뽑아주세요!");
+        return;
+      }
+
+      const nickname = (qnaNick.value || "Guest").slice(0, 24);
+      const body = (qnaBody.value || "").trim();
+      if (!body) return;
+
+      qnaBody.value = "";
+
+      const { error } = await sb
+        .from("comments")
+        .insert({
+          page_id: PAGE_ID,
+          nickname,
+          body,
+          kind: "qa",
+          question_index: currentQuestionIndex
+        });
+
+      if (error) {
+        console.error(error);
+        alert("답변 저장 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.");
+        return;
+      }
+
+      qaCounts[currentQuestionIndex] = (qaCounts[currentQuestionIndex] || 0) + 1;
+      qnaAnswerCount.textContent =
+        `이 질문에 달린 답변 ${qaCounts[currentQuestionIndex]}개가 있어요 ✨`;
+    });
+  }
+
+  // Q&A 꽃잎 애니메이션 keyframes 주입
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes qna-petal-fly {
+      0%   { opacity:1; transform:translate(-50%, -50%) scale(1); }
+      100% { opacity:0; transform:translate(-50%, -120px) scale(1.4); }
     }
-	</script>
+  `;
+  document.head.appendChild(style);
+</script>
 
+
+
+<!-- 질문별 답변 모아보기 모달 -->
+<div class="modal" id="qa-modal">
+  <div class="box" style="background:#fff;max-width:640px;width:100%;border-radius:14px;overflow:hidden;">
+    <div style="padding:14px 16px;border-bottom:1px solid #f1f1f1;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:0.9rem;color:#ff6b92;font-weight:600;">질문에 대한 답변 모아보기</div>
+        <div id="qa-modal-question" style="font-size:0.85rem;color:#6b7280;margin-top:2px;"></div>
+      </div>
+      <button id="qa-modal-close"
+              style="border:none;background:none;font-size:1.2rem;cursor:pointer;color:#9ca3af;">
+        ✕
+      </button>
+    </div>
+    <div id="qa-modal-list" style="max-height:360px;overflow-y:auto;padding:12px 16px;font-size:0.9rem;">
+      <!-- JS에서 답변 목록 렌더링 -->
+    </div>
+  </div>
+</div>
+
+<script>
+  const qaModal = document.getElementById("qa-modal");
+  const qaModalQuestion = document.getElementById("qa-modal-question");
+  const qaModalList = document.getElementById("qa-modal-list");
+  const qaModalClose = document.getElementById("qa-modal-close");
+  const qnaViewBtn = document.getElementById("qna-view-answers");
+
+  if (qaModal && qaModalQuestion && qaModalList && qaModalClose && qnaViewBtn) {
+    qnaViewBtn.addEventListener("click", async () => {
+      if (currentQuestionIndex === null || typeof currentQuestionIndex !== "number") {
+        alert("먼저 질문 카드를 뽑아주세요!");
+        return;
+      }
+
+      const qText = questions[currentQuestionIndex] || "";
+      qaModalQuestion.textContent = `Q. ${qText}`;
+      qaModalList.innerHTML = "불러오는 중입니다...";
+
+      try {
+        const { data, error } = await sb
+          .from("comments")
+          .select("*")
+          .eq("page_id", PAGE_ID)
+          .eq("kind", "qa")
+          .eq("question_index", currentQuestionIndex)
+          .order("created_at", { ascending: true });
+
+        if (error) {
+          console.error(error);
+          qaModalList.textContent = "답변을 불러오는 중 오류가 발생했어요 🥲";
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          qaModalList.textContent = "아직 이 질문에 대한 답변이 없어요. 첫 번째로 답변을 남겨주세요 🌸";
+        } else {
+          qaModalList.innerHTML = data.map(item => `
+            <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;">
+              <div style="font-weight:600;font-size:0.9rem;">
+                ${esc(item.nickname)}
+                <span style="color:#9ca3af;font-size:0.75rem;margin-left:4px;">
+                  ${item.created_at ? new Date(item.created_at).toLocaleString() : ""}
+                </span>
+              </div>
+              <div style="margin-top:4px;">${esc(item.body)}</div>
+            </div>
+          `).join("");
+        }
+      } catch (e) {
+        console.error(e);
+        qaModalList.textContent = "알 수 없는 오류가 발생했어요 🥲";
+      }
+
+      qaModal.classList.add("open");
+    });
+
+    qaModalClose.addEventListener("click", () => {
+      qaModal.classList.remove("open");
+    });
+
+    qaModal.addEventListener("click", (e) => {
+      if (e.target === qaModal) {
+        qaModal.classList.remove("open");
+      }
+    });
+  }
+</script>
 </body>
 </html>
