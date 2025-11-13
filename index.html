@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>미영이의 결혼을 축하합니다.</title>
-  <meta name="description" content="따뜻한 마음을 전하는 디지털 청첩장" />
+  <meta name="description" content="따뜻한 마음을 전하는 랜선 브라이덜 샤워" />
   <!-- Open Graph for link preview -->
-  <meta property="og:title" content="미영의 결혼식에 초대합니다" />
+  <meta property="og:title" content="미영의 랜선 브라이덜 샤워에 초대합니다" />
   <meta property="og:description" content="소중한 날 함께 해주세요" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="cover.jpg" />
@@ -85,9 +85,13 @@
         opacity: 0.3;
       }
     }
+
+	/* 특정 제목 공백 */
 	.subh2 {
       padding-top: inherit;
 	}
+
+	/* 축하 제목 */
 	.english {
       font-family: "Allura", cursive;
       font-weight: auto;
@@ -98,25 +102,52 @@
       /* margin-top: 80px; */
       color: #ff8585;
     }
-	.comment-container {
-		width: auto;
-		margin: 20px auto;
+
+
+	/* 좋아요 버튼 기본 스타일 조금 다듬기 */
+	.like-btn {
+	position: relative;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+	color: #f37a9e;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
 	}
-	#comment-input {
-		width: 80%;
-		padding: 10px;
+
+	/* 눌렀을 때 통통 튀는 효과 */
+	.like-btn.pulse {
+	animation: heart-pop 0.35s ease-out;
 	}
-	button {
-		padding: 10px;
+
+	@keyframes heart-pop {
+	0%   { transform: scale(1); }
+	40%  { transform: scale(1.3); }
+	100% { transform: scale(1); }
 	}
-	#comment-list {
-		list-style-type: none;
-		padding: 0;
-		margin-top: 20px;
+
+	/* 위로 날아가는 작은 하트 */
+	.flying-heart {
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	transform: translateX(-50%);
+	font-size: 14px;
+	pointer-events: none;
+	animation: heart-fly 0.8s ease-out forwards;
 	}
-	li {
-		padding: 10px;
-		border-bottom: 1px solid #ddd;
+
+	@keyframes heart-fly {
+	0% {
+		opacity: 1;
+		transform: translate(-50%, 0) scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(-50%, -30px) scale(1.3);
+	}
 	}
   </style>
 </head>
@@ -189,7 +220,7 @@
   </section>
 
   <!-- 계좌 & 축하 메시지 -->
-  <section class="wrap section card">
+  <!-- <section class="wrap section card">
     <h2>마음 전하실 곳</h2>
     <p class="muted" style="margin-top:0">직접 뵙기 어려운 분들을 위해 계좌번호를 안내드립니다.</p>
     <div class="grid">
@@ -208,48 +239,31 @@
         <button class="btn" data-copy="accGroom">복사</button>
       </div>
     </div>
-  </section>
+  </section> -->
 
-  <!-- 댓글 입력 폼 -->
-  <!-- <section id="rsvp" class="wrap section card">
-    <div class="comment-container">
-    <h2>댓글</h2>
-    <p class="muted" style="margin-top:0">다양한 의견 댓글로 적어주세요.</p>
-        <form id="comment-form">
-            <input type="text" id="comment-input" placeholder="댓글을 입력하세요" required>
-            <button type="submit">등록</button>
-        </form>
-         -->
-        <!-- 댓글 목록 -->
-        <!-- <ul id="comment-list"> -->
-            <!-- 댓글 아이템이 여기에 동적으로 추가됩니다 -->
-        <!-- </ul>
-    </div>
-
-    <script src="script.js"></script>
-	</section> -->
 
 	<!-- 댓글 영역 -->
-<section id="comments" class="card" style="margin-top:24px;">
-  <h2>축하 댓글 💌</h2>
-  <div id="comment-list"
-       style="display:flex;flex-direction:column;gap:10px;margin:12px 0;"></div>
+	<section id="comments" class="wrap section card" style="margin-top:24px;">
+	<h2>축하 댓글 💌</h2>
+	<!-- <div id="comment-list"
+		style="display:flex;flex-direction:column;gap:10px;margin:12px 0;"></div> -->
+	<div id="comment-list"></div>
+	<form id="comment-form" style="display:flex;gap:8px;flex-wrap:wrap;">
+		<input id="comment-nick" placeholder="이름"
+			style="flex:0 0 140px;padding:10px;border-radius:10px;border:1px solid #ddd">
+		<input id="comment-body" placeholder="축하 메시지를 남겨주세요"
+			style="flex:1 1 180px;padding:10px;border-radius:10px;border:1px solid #ddd">
+		<button style="padding:10px 16px;border-radius:10px;border:none;
+					background:#f19cb4;color:#fff;font-weight:600;cursor:pointer;">
+		보내기
+		</button>
+	</form>
 
-  <form id="comment-form" style="display:flex;gap:8px;flex-wrap:wrap;">
-    <input id="comment-nick" placeholder="이름"
-           style="flex:0 0 140px;padding:10px;border-radius:10px;border:1px solid #ddd">
-    <input id="comment-body" placeholder="축하 메시지를 남겨주세요"
-           style="flex:1 1 180px;padding:10px;border-radius:10px;border:1px solid #ddd">
-    <button style="padding:10px 16px;border-radius:10px;border:none;
-                   background:#f19cb4;color:#fff;font-weight:600;cursor:pointer;">
-      보내기
-    </button>
-  </form>
+	<p style="color:#999;font-size:12px;margin-top:6px;">
+		남겨주신 축하 메시지는 페이지에 저장되어 모두 함께 볼 수 있어요 ✨
+	</p>
+	</section>
 
-  <p style="color:#999;font-size:12px;margin-top:6px;">
-    남겨주신 축하 메시지는 페이지에 저장되어 모두 함께 볼 수 있어요 ✨
-  </p>
-</section>
   <!-- RSVP -->
   <section id="rsvp" class="wrap section card">
     <h2>참석 의사 전달</h2>
@@ -375,63 +389,107 @@
 	const $nick = document.getElementById("comment-nick");
 	const $body = document.getElementById("comment-body");
 
-	const esc = (s) =>
-		s.replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+	const esc = s => s.replace(/[&<>\"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
+	);
 
-	function renderComment(item, prepend=false) {
+	function renderComment(item) {
 		const el = document.createElement("div");
-		el.style.cssText =
-		"padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #eee;";
-
-		const t = new Date(item.created_at);
-		el.innerHTML = `
-		<strong>${esc(item.nickname || "Guest")}</strong>
-		<span style="color:#999;font-size:12px;margin-left:6px;">
-			${t.toLocaleString()}
-		</span>
-		<div style="margin-top:6px;">${esc(item.body)}</div>
+		el.className = "comment-card";
+		el.style.cssText = `
+		background:#fff; padding:12px 14px; border-radius:12px; 
+		border:1px solid #eee; position:relative;
 		`;
-		prepend ? $list.prepend(el) : $list.append(el);
+
+		el.innerHTML = `
+		<b>${esc(item.nickname)}</b>
+		<span style="color:#999;font-size:12px;margin-left:6px;">
+			${new Date(item.created_at).toLocaleString()}
+		</span>
+		<div style="margin-top:6px">${esc(item.body)}</div>
+
+		<button class="like-btn" data-id="${item.id}"
+			style="
+			position:absolute; right:12px; bottom:12px;
+			background:none; border:none; cursor:pointer;
+			font-size:18px; color:#f37a9e;">
+			❤️ <span>${item.likes || 0}</span>
+		</button>
+		`;
+
+		$list.append(el);
 	}
 
-	// ==== 2) 초기 댓글 불러오기 ====
-	(async () => {
-		const { data, error } = await sb
-		.from("comments")
-		.select("*")
-		.eq("page_id", PAGE_ID)
-		.order("created_at", { ascending: true })
-		.limit(200);
+ // 1) 댓글 초기 불러오기
+  (async () => {
+    const { data } = await sb
+      .from("comments")
+      .select("*")
+      .eq("page_id", PAGE_ID)
+      .order("created_at");
 
-		if (error) {
+    data.forEach(renderComment);
+  })();
+
+  // 2) 실시간 INSERT + UPDATE(좋아요 반영)
+  sb.channel("realtime-comments")
+  .on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "comments", filter: `page_id=eq.${PAGE_ID}` },
+    (payload) => {
+      if (payload.eventType === "INSERT") {
+        renderComment(payload.new);
+      }
+      if (payload.eventType === "UPDATE") {
+        const btn = document.querySelector(
+          `button.like-btn[data-id="${payload.new.id}"]`
+        );
+        if (btn) {
+          const span = btn.querySelector("span");
+          if (span) span.textContent = payload.new.likes;
+        }
+      }
+    }
+  )
+  .subscribe();
+
+	// 3) 좋아요 버튼 클릭 → likes +1
+	document.addEventListener("click", async (e) => {
+	const btn = e.target.closest(".like-btn");
+	if (!btn) return;
+
+	const id = btn.dataset.id;
+
+	// 1) 애니메이션 효과: 통통 튀기
+	btn.classList.remove("pulse");
+	void btn.offsetWidth;           // 강제 리플로우로 애니메이션 재시작
+	btn.classList.add("pulse");
+
+	// 2) 위로 날아가는 작은 하트 추가
+	const flying = document.createElement("span");
+	flying.className = "flying-heart";
+	flying.textContent = "❤";
+	btn.appendChild(flying);
+	setTimeout(() => flying.remove(), 800);
+
+	// 3) Supabase에서 현재 likes 값 가져와서 +1
+	const { data, error } = await sb
+		.from("comments")
+		.select("likes")
+		.eq("id", id)
+		.single();
+
+	if (error) {
 		console.error(error);
 		return;
-		}
-		data.forEach(renderComment);
-	})();
+	}
 
-	// ==== 3) 실시간 새 댓글 구독 ====
-	sb.channel("comments-stream")
-		.on(
-		"postgres_changes",
-		{ event: "INSERT", schema: "public", table: "comments", filter: `page_id=eq.${PAGE_ID}` },
-		(payload) => renderComment(payload.new)
-		)
-		.subscribe();
+	await sb
+		.from("comments")
+		.update({ likes: (data.likes || 0) + 1 })
+		.eq("id", id);
 
-	// ==== 4) 댓글 전송 ====
-	$form.addEventListener("submit", async (e) => {
-		e.preventDefault();
-		const nickname = ($nick.value || "Guest").slice(0, 24);
-		const body = ($body.value || "").trim();
-		if (!body) return;
-
-		// 낙관적 렌더 (바로 화면에 보여주기)
-		const temp = { nickname, body, created_at: new Date().toISOString() };
-		renderComment(temp, true);
-		$body.value = "";
-
-		await sb.from("comments").insert({ page_id: PAGE_ID, nickname, body });
+	// 실제 숫자 반영은 실시간 UPDATE 이벤트에서 처리됨
 	});
   </script>
 </body>
