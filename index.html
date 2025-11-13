@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#fffaf8; --ink:#1f2937; --muted:#6b7280; --brand:#c26b5e; --soft:#f8e7e2; --card:#ffffff;
+      --bg:#fffaf8; --ink:#1f2937; --muted:#6b7280; --brand:#ff8585; --soft:#f8e7e2; --card:#ffffff;
       --radius:18px; --shadow:0 6px 18px rgba(0,0,0,.08);
     }
     *{box-sizing:border-box}
@@ -103,6 +103,15 @@
       color: #ff8585;
     }
 
+	#comment-list {
+		display:flex;
+		flex-direction:column;
+		gap:10px;
+		margin:12px 0;
+		max-height: 350px;   /* 카드 안에 보일 최대 높이 */
+		overflow-y: auto;     /* 세로 스크롤 */
+		padding-right: 6px;   /* 스크롤바 공간 */
+	}
 
 	/* 좋아요 버튼 기본 스타일 조금 다듬기 */
 	.like-btn {
@@ -240,6 +249,41 @@
       </div>
     </div>
   </section> -->
+  	<!-- 질문 카드 영역 -->
+	<section class="wrap section card" id="qna-card" style="text-align:center;margin-top:30px;">
+	<h2>💕 오늘의 질문 카드</h2>
+	
+	<div id="question-box" 
+		style="
+			background:#ff85852a;
+			border-radius:16px;
+			padding:26px 20px;
+			margin-top:14px;
+			min-height:90px;
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			font-size:1.05rem;
+			color:#7d4a58;
+			box-shadow:0 4px 12px rgba(0,0,0,0.06);
+			transition:0.25s ease;
+			">
+		👉 버튼을 눌러 질문을 뽑아보세요!
+	</div>
+
+	<button id="draw-question" 
+		style="
+		margin-top:16px;
+		padding:12px 20px;
+		border:none;
+		border-radius:12px;
+		background:#ff8585;
+		color:white;
+		font-weight:600;
+		cursor:pointer;">
+		질문 뽑기 🌸
+	</button>
+	</section>
 
 
 	<!-- 댓글 영역 -->
@@ -254,7 +298,7 @@
 		<input id="comment-body" placeholder="축하 메시지를 남겨주세요"
 			style="flex:1 1 180px;padding:10px;border-radius:10px;border:1px solid #ddd">
 		<button style="padding:10px 16px;border-radius:10px;border:none;
-					background:#f19cb4;color:#fff;font-weight:600;cursor:pointer;">
+					background:#ff8585;color:#fff;font-weight:600;cursor:pointer;">
 		보내기
 		</button>
 	</form>
@@ -439,6 +483,10 @@
     (payload) => {
       if (payload.eventType === "INSERT") {
         renderComment(payload.new);
+		// $list.scrollTop = $list.scrollHeight; // ← 여기 추가!
+		$list.scrollTo({ top: $list.scrollHeight, behavior: "smooth" });
+
+
       }
       if (payload.eventType === "UPDATE") {
         const btn = document.querySelector(
@@ -491,6 +539,92 @@
 
 	// 실제 숫자 반영은 실시간 UPDATE 이벤트에서 처리됨
 	});
-  </script>
+
+
+	// ==== 4) 댓글 전송 ====
+	$form.addEventListener("submit", async (e) => {
+	e.preventDefault();
+	const nickname = ($nick.value || "Guest").slice(0, 24);
+	const body = ($body.value || "").trim();
+	if (!body) return;
+
+	// 입력창만 먼저 비우고
+	$nick.value = "";
+	$body.value = "";
+
+	// DB에만 저장 → 화면 추가는 실시간 INSERT 이벤트에서 처리
+	const { error } = await sb
+		.from("comments")
+		.insert({ page_id: PAGE_ID, nickname, body });
+
+	if (error) {
+		console.error(error);
+		alert("댓글 저장 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.");
+	}
+	});
+
+	// 질문목록
+	const questions = [
+		"신부와 함께한 가장 기억에 남는 순간은?",
+		"둘이 정말 잘 맞는다고 느낀 이유는 무엇인가요?",
+		"신부에게 한마디 축하 메시지를 남긴다면?",
+		"둘의 첫인상은 어땠나요?",
+		"신부의 가장 귀여운 점은 무엇인가요?",
+		"둘이 오래오래 잘 살 것 같다고 느꼈던 순간은?",
+		"신부와 함께 가고 싶은 여행지는?",
+		"둘의 러브스토리 중 가장 좋아하는 장면은?",
+		"신부에게 나만 아는 TMI 한 가지!",
+		"두 사람을 보며 떠오르는 노래는?"
+	];
+
+	const box = document.getElementById("question-box");
+	const btn = document.getElementById("draw-question");
+
+	function getRandomQuestion() {
+		return questions[Math.floor(Math.random() * questions.length)];
+	}
+
+	function animatePetal() {
+	const boxRect = box.getBoundingClientRect();  
+	// box: 질문 박스 DOM
+
+	const petal = document.createElement("span");
+	petal.textContent = "🌸";
+	petal.style.cssText = `
+		position: fixed;
+		left: ${boxRect.left + boxRect.width / 2}px;
+		top: ${boxRect.bottom - 20}px;
+		font-size: 26px;
+		pointer-events: none;
+		z-index: 9999;
+		animation: qna-petal-fly 1s ease-out forwards;
+	`;
+	document.body.appendChild(petal);
+	setTimeout(() => petal.remove(), 1000);
+	}
+
+	btn.addEventListener("click", () => {
+		// 박스 흔들리는 연출
+		box.style.transform = "scale(0.95)";
+		setTimeout(() => (box.style.transform = "scale(1)"), 120);
+
+		// 꽃잎 효과
+		animatePetal();
+
+		// 질문 바꾸기
+		box.textContent = getRandomQuestion();
+	});
+
+	// 꽃잎 애니메이션 스타일
+	const style = document.createElement("style");
+	style.textContent = `
+		@keyframes qna-petal-fly {
+		0%   { opacity:1; transform:translate(-50%, -50%) scale(1); }
+		100% { opacity:0; transform:translate(-50%, -120px) scale(1.4); }
+		}
+	`;
+	document.head.appendChild(style);
+	</script>
+
 </body>
 </html>
