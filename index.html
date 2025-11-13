@@ -362,7 +362,7 @@
   	<!-- 질문 카드 영역 -->
 	<!-- 질문 카드 + 답변 입력 영역 -->
 <section class="wrap section card" id="qna-card" style="text-align:center;margin-top:30px;">
-  <h2>💕 오늘의 질문 카드</h2>
+  <h2>💕 두사람의 질문 카드</h2>
 
   <!-- 질문 카드 -->
   <div id="question-box" 
@@ -484,32 +484,83 @@
 	</p>
 	</section>
 
+  <section id="meetup" class="wrap section card">
+  <h2>청첩장 모임 날짜 의견 모으기 📅</h2>
+  <p class="muted" style="margin-top:4px;">
+    종이 청첩장을 나누는 작은 모임 날짜를 정하려고 해요.<br>
+    가능한 날짜와 함께 간단한 의견을 남겨주세요 💌
+  </p>
+
+  <!-- 의견 작성 폼 -->
+  <form id="meetup-form" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+    <input id="meet-name" placeholder="이름"
+           style="flex:0 0 140px;padding:10px;border-radius:10px;border:1px solid #ddd">
+    <input id="meet-date" type="date"
+           style="flex:1 1 160px;padding:10px;border-radius:10px;border:1px solid #ddd">
+    <input id="meet-note" placeholder="원하는 시간대나 장소, 한마디 의견 :)"
+           style="flex:1 1 100%;padding:10px;border-radius:10px;border:1px solid #ddd">
+    <button style="
+      padding:10px 16px;
+      border-radius:10px;
+      border:none;
+      background:#ff8585;
+      color:#fff;
+      font-weight:600;
+      cursor:pointer;">
+      의견 보내기
+    </button>
+  </form>
+
+  <p style="color:#999;font-size:12px;margin-top:6px;">
+    ※ 후보 날짜는 신부가 참고용으로만 사용할 예정이에요. 편하게 적어주세요 ✨
+  </p>
+
+  <!-- 날짜별 요약 -->
+  <div id="meetup-summary" style="margin-top:14px;padding:10px;border-radius:10px;background:#fff7fa;font-size:0.9rem;color:#7d4a58;">
+    아직 모임 날짜 의견이 없어요. 첫 번째로 남겨주세요 🌸
+  </div>
+
+  <!-- 개별 의견 목록 -->
+  <div id="meetup-list" style="margin-top:10px;max-height:260px;overflow-y:auto;padding-right:4px;">
+    <!-- JS로 목록 렌더링 -->
+  </div>
+</section>
+
   <!-- RSVP -->
-  <section id="rsvp" class="wrap section card">
+  <!-- <section id="rsvp" class="wrap section card">
     <h2>청첩장 모임 의견 전달</h2>
     <p class="muted">아래 버튼을 눌러 의견을 남겨주세요.</p>
-    <!-- 구글폼/티스토리/네이버폼 등 설문 URL로 교체 -->
+    구글폼/티스토리/네이버폼 등 설문 URL로 교체
     <a class="btn full" href="https://forms.gle/" target="_blank" rel="noopener">의견 작성하기</a>
-  </section>
+  </section> -->
 
   <!-- 지도 -->
-  <section id="map" class="wrap section card">
+  <!-- Google Maps 장소 검색 임베드. 주소/쿼리를 수정하세요. -->
+  <!-- <section id="map" class="wrap section card">
     <h2>오시는 길</h2>
     <p class="muted">대중교통 및 주차 안내를 함께 기재하세요.</p>
-    <!-- Google Maps 장소 검색 임베드. 주소/쿼리를 수정하세요. -->
     <div style="border-radius:12px; overflow:hidden">
       <iframe
         src="https://www.google.com/maps?q=대구시%20수성구%20동대구로%20&output=embed"
         width="100%" height="260" style="border:0" allowfullscreen="" loading="lazy"></iframe>
     </div>
-  </section>
+  </section> -->
+
 
   <footer class="foot wrap">
-    <div class="divider"></div>
-    <p>끝까지 봐주셔서 감사합니다 · 제작자: 친구</p>
-    <p>이 축하장은 축하하는 마음에 개인이 작성한 축하장입니다.<br/>결혼식관련 자세한 내용은 청첩장으로 확인하세요</p>
-  </footer>
-
+  <div class="divider"></div>
+  <p> 끝까지 봐주셔서 감사합니다·<br/></p>
+  <p> 제작자: 신부 친구</p>
+  <p> 이 축하장은 개인이 작성한 축하장입니다.<br/></p>
+  <p style="margin-top:6px;font-size:12px;color:#9ca3af;">
+    이 축하장 관련 문의나 수정 요청은
+    <a href="mailto:jaunnnngs@naver.com"
+       style="color:#ff8585;text-decoration:none;font-weight:500;">
+      jaunnnngs@naver.com
+    </a>
+    로 편하게 보내주세요 💌
+  </p>
+</footer>
   <!-- 이미지 라이트박스 모달 -->
   <div class="modal" id="modal">
     <div class="box"><img id="modalImg" src="" alt="preview"></div>
@@ -938,6 +989,30 @@
     document.body.appendChild(petal);
     setTimeout(() => petal.remove(), 1000);
   }
+  
+  // ===== Q&A 질문별 기존 답변 개수 불러오기 =====
+  (async () => {
+    const { data, error } = await sb
+      .from("comments")
+      .select("question_index")
+      .eq("page_id", PAGE_ID)
+      .eq("kind", "qa");
+
+    if (error) {
+      console.error("Q&A count load error:", error);
+      return;
+    }
+
+    // question_index별 개수 집계
+    qaCounts = {};
+    (data || []).forEach(item => {
+      const idx = item.question_index;
+      if (idx === null || idx === undefined) return;
+      qaCounts[idx] = (qaCounts[idx] || 0) + 1;
+    });
+
+    console.log("📌 초기 Q&A 개수 로드:", qaCounts);
+  })();
 
   // 질문 뽑기 버튼
   if (qBtn) {
@@ -1014,6 +1089,143 @@
     }
   `;
   document.head.appendChild(style);
+
+
+    // ==== 8) 청첩장 모임 날짜 의견 모으기 ====
+  const $meetForm = document.getElementById("meetup-form");
+  const $meetName = document.getElementById("meet-name");
+  const $meetDate = document.getElementById("meet-date");
+  const $meetNote = document.getElementById("meet-note");
+  const $meetList = document.getElementById("meetup-list");
+  const $meetSummary = document.getElementById("meetup-summary");
+
+  // 날짜 포맷 helper (YYYY-MM-DD → 보기 좋게)
+  function formatDateKorean(str) {
+    if (!str) return "";
+    const d = new Date(str + "T00:00:00");
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    const wNames = ["일","월","화","수","목","금","토"];
+    const w = wNames[d.getDay()];
+    return `${y}년 ${m}월 ${day}일 (${w})`;
+  }
+
+  // 의견 목록 렌더링
+  function renderMeetupList(items) {
+    if (!$meetList || !$meetSummary) return;
+
+    if (!items || items.length === 0) {
+      $meetList.innerHTML = "";
+      $meetSummary.textContent = "아직 모임 날짜 의견이 없어요. 첫 번째로 남겨주세요 🌸";
+      return;
+    }
+
+    // 날짜별 집계
+    const map = {};
+    items.forEach(it => {
+      const key = it.meet_date;
+      if (!map[key]) map[key] = 0;
+      map[key] += 1;
+    });
+
+    // 요약 텍스트 생성 (날짜별 몇 명인지)
+    const summaryParts = Object.entries(map)
+      .sort(([d1], [d2]) => d1.localeCompare(d2))
+      .map(([d, count]) => `${formatDateKorean(d)} · ${count}명`);
+
+    $meetSummary.innerHTML = `
+      <b>모임 날짜 후보 요약</b><br>
+      ${summaryParts.join("<br>")}
+    `;
+
+    // 개별 의견 리스트
+    $meetList.innerHTML = items
+      .sort((a, b) => (a.meet_date || "").localeCompare(b.meet_date || "") || (new Date(a.created_at) - new Date(b.created_at)))
+      .map(it => `
+        <div style="padding:8px 6px;border-bottom:1px solid #f3f4f6;font-size:0.9rem;">
+          <div style="font-weight:600;">
+            ${esc(it.nickname || "Guest")}
+            <span style="color:#9ca3af;font-size:0.78rem;margin-left:4px;">
+              ${formatDateKorean(it.meet_date)}
+            </span>
+          </div>
+          ${it.note ? `<div style="margin-top:4px;color:#4b5563;">${esc(it.note)}</div>` : ""}
+        </div>
+      `)
+      .join("");
+  }
+
+  // 초기 의견 목록 불러오기
+  (async () => {
+    if (!$meetList) return;
+    const { data, error } = await sb
+      .from("meetup_suggestions")
+      .select("*")
+      .eq("page_id", PAGE_ID)
+      .order("meet_date", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+    renderMeetupList(data || []);
+  })();
+
+  // 의견 전송
+  if ($meetForm) {
+    $meetForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const nickname = ($meetName.value || "Guest").slice(0, 24);
+      const meetDate = ($meetDate.value || "").trim();
+      const note = ($meetNote.value || "").trim();
+
+      if (!meetDate) {
+        alert("먼저 희망 날짜를 선택해 주세요 🗓️");
+        return;
+      }
+
+      // 입력 비우기
+      $meetNote.value = "";
+
+      const { data, error } = await sb
+        .from("meetup_suggestions")
+        .insert({
+          page_id: PAGE_ID,
+          nickname,
+          meet_date: meetDate,
+          note
+        })
+        .select(); // insert 결과도 data로 받기
+
+      if (error) {
+        console.error(error);
+        alert("의견 저장 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.");
+        return;
+      }
+
+      // 목록 다시 갱신
+      const inserted = data && data[0];
+      if (inserted) {
+        // 그냥 다시 불러와도 되고,
+        // 여기서는 기존 목록 재조회 대신 간단히 추가 후 다시 렌더
+        const { data: allRows, error: listErr } = await sb
+          .from("meetup_suggestions")
+          .select("*")
+          .eq("page_id", PAGE_ID)
+          .order("meet_date", { ascending: true })
+          .order("created_at", { ascending: true });
+
+        if (!listErr) {
+          renderMeetupList(allRows || []);
+        }
+      }
+
+      // alert("의견이 등록되었어요! 고마워요 💕");
+    });
+  }
 </script>
 
 
