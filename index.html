@@ -27,10 +27,10 @@
     .wrap{max-width:720px;margin:0 auto;padding:16px}
     .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
     .hero{position:relative;border-radius:var(--radius);overflow:hidden}
-    .hero img{width:100%;height:360px;object-fit:cover;filter:brightness(.9)}
+    .hero img{width:100%;height:100%;object-fit:cover;filter:brightness(.9)}
     .hero .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:24px}
     /* .badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:90px 10px;border-radius:999px;font-size:12px;letter-spacing:.08em} */
-    .badge{padding:90px 10px;}
+    .badge{padding:20% 10px;}
     h1{margin:10px 0 0;font-size:28px;}
     h2{margin:0;font-size:20px;color:var(--brand)}
     .muted{color:var(--muted)}
@@ -55,12 +55,12 @@
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;place-items:center;padding:16px}
     .modal.open{display:grid}
     .modal .box{background:#000;max-width:720px;width:100%;border-radius:12px;overflow:hidden}
-    .modal img{width:100%;height:auto}
+    .modal img{width:100%;height:100%}
 
     /* Responsive */
     @media(min-width:720px){
       h1{font-size:36px}
-      .hero img{height:560px}
+      .hero img{height:100%}
     }
 
 	/* 🌸 Flower Petal Animation */
@@ -85,9 +85,12 @@
         opacity: 0.3;
       }
     }
+	.subh2 {
+      padding-top: inherit;
+	}
 	.english {
       font-family: "Allura", cursive;
-      font-weight: 400;
+      font-weight: auto;
       font-style: normal;
       font-size: 2.5rem;
       text-align: center;
@@ -95,7 +98,7 @@
       color: #ff8585;
     }
 	.comment-container {
-		width: 500px;
+		width: auto;
 		margin: 20px auto;
 	}
 	#comment-input {
@@ -136,7 +139,7 @@
       <div class="overlay">
         <span class="badge"></span>
         <h1>미영 · (신랑 이름)</h1>
-        <p class="muted" style="margin:4px 0 12px">2026년 3월 ㅇㅇ일 ㅇ요일 오후 ㅇ시</p>
+        <p class="muted" style="margin:4px 0 12px">예시) 2026년 3월 14일 토요일 오후 1시</p>
         <div class="countdown" id="countdown"></div>
       </div>
     </div>
@@ -145,10 +148,10 @@
   <!-- 인사말 & 기본 정보 -->
   <section class="wrap section card">
     <h2>축하합니다</h2>
-    <p class="muted">미영이가 소중한 짝궁을 만난 걸 너무 축하해. 서로의 가장 친한 친구가 되길 기도해</p>
+    <p class="muted">넓은 세상에서 미영이가 가장 소중한 짝궁을 만난 걸 너무 축하해</p>
     <div class="divider"></div>
     <div class="grid">
-      <div class="kv"><div><strong>일시</strong></div><div>2026년 3월 14일(토) 13:00</div></div>
+      <div class="kv"><div><strong>일시</strong></div><div>예시) 2026년 3월 14일(토) 13:00</div></div>
       <div class="kv"><div><strong>장소</strong></div><div>대구 ○○웨딩홀 3층 그랜드홀</div></div>
       <div class="kv"><div><strong>주소</strong></div><div>대구시 ○○구 ○○로 123</div></div>
       <div class="kv"><div><strong>연락</strong></div><div>신부 미영 010-1234-5678</div></div>
@@ -163,21 +166,20 @@
   <!-- 갤러리 -->
   <section class="wrap section card">
     <h2>우리의 순간</h2>
-    <div class="gallery" id="gallery">
-      <!-- 썸네일 이미지를 /images 폴더에 넣고 경로만 바꾸세요 -->
+    <div class="gallery subh2" id="gallery">
       <div class="thumb"><img src="img/sample_2.png" alt="pic1"></div>
       <div class="thumb"><img src="img/sample_3.png" alt="pic2"></div>
       <div class="thumb"><img src="img/sample_4.png" alt="pic3"></div>
       <div class="thumb"><img src="img/sample_5.png" alt="pic4"></div>
       <div class="thumb"><img src="img/sample_6.png" alt="pic5"></div>
-      <div class="thumb"><img src="img/sample_1.png" alt="pic6"></div>
+      <div class="thumb"><img src="img/sample_7.png" alt="pic6"></div>
     </div>
   </section>
 
   <!-- 일정 -->
   <section class="wrap section card">
     <h2>예식 안내</h2>
-    <div class="grid">
+    <div class="grid subh2">
       <div class="kv"><div><strong>오전 11:00</strong></div><div>신부 대기실 오픈</div></div>
       <div class="kv"><div><strong>오후 12:30</strong></div><div>하객 입장</div></div>
       <div class="kv"><div><strong>오후 1:00</strong></div><div>본식 시작</div></div>
