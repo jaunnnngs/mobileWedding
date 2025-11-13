@@ -9,8 +9,8 @@
   <meta property="og:title" content="미영의 랜선 브라이덜 샤워에 초대합니다" />
   <meta property="og:description" content="소중한 날 함께 해주세요" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="cover.jpg" />
-  <meta property="og:url" content="https://for-miyoung.kr" />
+  <meta property="og:image" content="img/sample_1.png" />
+  <!-- <meta property="og:url" content="https://for-miyoung.kr" /> -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -384,8 +384,8 @@
 
     // ===== 캘린더(.ics) 저장 =====
     document.getElementById('addCalendar').addEventListener('click', ()=>{
-      const dtStart = '20250524T040000Z'; // KST 13:00 == UTC 04:00
-      const dtEnd   = '20250524T060000Z'; // 2시간 후
+      const dtStart = '20260314T040000Z'; // KST 13:00 == UTC 04:00
+      const dtEnd   = '20260314T060000Z'; // 2시간 후
       const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Invite//KR//KO\nBEGIN:VEVENT\nUID:${Date.now()}@invite\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z\nDTSTART:${dtStart}\nDTEND:${dtEnd}\nSUMMARY:미영의 결혼식\nLOCATION:서울 ○○웨딩홀 3층 그랜드홀\nDESCRIPTION:소중한 날 함께 해주세요\nEND:VEVENT\nEND:VCALENDAR`;
       const blob = new Blob([ics], {type:'text/calendar'});
       const url = URL.createObjectURL(blob);
@@ -396,7 +396,7 @@
 
     // ===== 링크 공유 (Web Share API) =====
     document.getElementById('shareBtn').addEventListener('click', async ()=>{
-      const data = {title: document.title, text:'미영의 결혼식에 초대합니다', url: location.href};
+      const data = {title: document.title, text:'미영의 랜선 브라이덜 샤워에 초대합니다', url: location.href};
       if(navigator.share){
         try{ await navigator.share(data); }catch(e){ /* 취소 */ }
       }else{
