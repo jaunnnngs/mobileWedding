@@ -89,12 +89,31 @@
       font-family: "Allura", cursive;
       font-weight: 400;
       font-style: normal;
-      font-size: 3rem;
+      font-size: 2.5rem;
       text-align: center;
       margin-top: 80px;
       color: #ff8585;
     }
-
+	.comment-container {
+		width: 500px;
+		margin: 20px auto;
+	}
+	#comment-input {
+		width: 80%;
+		padding: 10px;
+	}
+	button {
+		padding: 10px;
+	}
+	#comment-list {
+		list-style-type: none;
+		padding: 0;
+		margin-top: 20px;
+	}
+	li {
+		padding: 10px;
+		border-bottom: 1px solid #ddd;
+	}
   </style>
 </head>
 <body>
@@ -125,13 +144,13 @@
 
   <!-- 인사말 & 기본 정보 -->
   <section class="wrap section card">
-    <h2>초대합니다</h2>
-    <p class="muted">소중한 분들을 모시는 자리, 두 사람이 하나되는 순간을 함께 해주세요.</p>
+    <h2>축하합니다</h2>
+    <p class="muted">미영이가 소중한 짝궁을 만난 걸 너무 축하해. 서로의 가장 친한 친구가 되길 기도해</p>
     <div class="divider"></div>
     <div class="grid">
-      <div class="kv"><div><strong>일시</strong></div><div>2025년 5월 24일(토) 13:00</div></div>
-      <div class="kv"><div><strong>장소</strong></div><div>서울 ○○웨딩홀 3층 그랜드홀</div></div>
-      <div class="kv"><div><strong>주소</strong></div><div>서울시 ○○구 ○○로 123</div></div>
+      <div class="kv"><div><strong>일시</strong></div><div>2026년 3월 14일(토) 13:00</div></div>
+      <div class="kv"><div><strong>장소</strong></div><div>대구 ○○웨딩홀 3층 그랜드홀</div></div>
+      <div class="kv"><div><strong>주소</strong></div><div>대구시 ○○구 ○○로 123</div></div>
       <div class="kv"><div><strong>연락</strong></div><div>신부 미영 010-1234-5678</div></div>
     </div>
     <div class="divider"></div>
@@ -146,12 +165,12 @@
     <h2>우리의 순간</h2>
     <div class="gallery" id="gallery">
       <!-- 썸네일 이미지를 /images 폴더에 넣고 경로만 바꾸세요 -->
-      <div class="thumb"><img src="images/pic1.jpg" alt="pic1"></div>
-      <div class="thumb"><img src="images/pic2.jpg" alt="pic2"></div>
-      <div class="thumb"><img src="images/pic3.jpg" alt="pic3"></div>
-      <div class="thumb"><img src="images/pic4.jpg" alt="pic4"></div>
-      <div class="thumb"><img src="images/pic5.jpg" alt="pic5"></div>
-      <div class="thumb"><img src="images/pic6.jpg" alt="pic6"></div>
+      <div class="thumb"><img src="img/sample_2.png" alt="pic1"></div>
+      <div class="thumb"><img src="img/sample_3.png" alt="pic2"></div>
+      <div class="thumb"><img src="img/sample_4.png" alt="pic3"></div>
+      <div class="thumb"><img src="img/sample_5.png" alt="pic4"></div>
+      <div class="thumb"><img src="img/sample_6.png" alt="pic5"></div>
+      <div class="thumb"><img src="img/sample_1.png" alt="pic6"></div>
     </div>
   </section>
 
@@ -188,6 +207,24 @@
     </div>
   </section>
 
+  <!-- 댓글 입력 폼 -->
+  <section id="rsvp" class="wrap section card">
+    <div class="comment-container">
+    <h2>댓글</h2>
+    <p class="muted" style="margin-top:0">다양한 의견 댓글로 적어주세요.</p>
+        <form id="comment-form">
+            <input type="text" id="comment-input" placeholder="댓글을 입력하세요" required>
+            <button type="submit">등록</button>
+        </form>
+        
+        <!-- 댓글 목록 -->
+        <ul id="comment-list">
+            <!-- 댓글 아이템이 여기에 동적으로 추가됩니다 -->
+        </ul>
+    </div>
+
+    <script src="script.js"></script>
+	</section>
   <!-- RSVP -->
   <section id="rsvp" class="wrap section card">
     <h2>참석 의사 전달</h2>
@@ -210,7 +247,8 @@
 
   <footer class="foot wrap">
     <div class="divider"></div>
-    <p>함께 해주셔서 감사합니다 · 제작자: 친구</p>
+    <p>끝까지 봐주셔서 감사합니다 · 제작자: 친구</p>
+    <p>이 축하장은 축하하는 마음에 개인이 작성한 축하장입니다. 자세한 내용은 청첩장으로 확인하세요</p>
   </footer>
 
   <!-- 이미지 라이트박스 모달 -->
@@ -296,6 +334,48 @@
       petal.style.height = petal.style.width;
       document.body.appendChild(petal);
     }
+
+	document.addEventListener('DOMContentLoaded', () => {
+    const commentForm = document.getElementById('comment-form');
+    const commentInput = document.getElementById('comment-input');
+    const commentList = document.getElementById('comment-list');
+
+    // 로컬 스토리지에서 댓글 불러오기
+    function loadComments() {
+        // "comments" 키로 저장된 댓글 데이터를 JSON 형식으로 가져옴
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        commentList.innerHTML = ''; // 목록 초기화
+        comments.forEach(commentText => {
+            addCommentToDOM(commentText);
+        });
+    }
+
+    // DOM에 댓글 추가
+    function addCommentToDOM(commentText) {
+        const li = document.createElement('li');
+        li.textContent = commentText;
+        commentList.appendChild(li);
+    }
+
+    // 폼 제출 시 댓글 저장 및 화면 갱신
+    commentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newComment = commentInput.value.trim();
+
+        if (newComment) {
+            // 로컬 스토리지에 저장된 댓글 배열 가져오기
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.push(newComment); // 새 댓글 추가
+            localStorage.setItem('comments', JSON.stringify(comments)); // 다시 저장
+
+            addCommentToDOM(newComment); // 화면에 추가
+            commentInput.value = ''; // 입력창 비우기
+        }
+    });
+
+    // 페이지 로드 시 댓글 불러오기
+    loadComments();
+});
   </script>
 </body>
 </html>
