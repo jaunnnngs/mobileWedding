@@ -94,7 +94,8 @@
       font-style: normal;
       font-size: 2.5rem;
       text-align: center;
-      margin-top: 80px;
+      margin-bottom: 35px;
+      /* margin-top: 80px; */
       color: #ff8585;
     }
 	.comment-container {
@@ -129,16 +130,16 @@
       </div>
     </nav>
   </header>
-  <!-- 💒 💕-->
-	<h1 class="english"> Blessings on your marriage. </h1>
   <!-- HERO Cover -->
-  <section class="wrap section">
+  <section class="wrap section card">
+	  <!-- 💒 💕-->
+	<h1 class="english"> Blessings on your marriage. </h1>
     <div class="hero">
       <!-- 커버 이미지 교체: cover.jpg -->
       <img src="img/sample_1.png" alt="wedding cover" />
       <div class="overlay">
         <span class="badge"></span>
-        <h1>미영 · (신랑 이름)</h1>
+        <h1>미영 · (신랑)</h1>
         <p class="muted" style="margin:4px 0 12px">예시) 2026년 3월 14일 토요일 오후 1시</p>
         <div class="countdown" id="countdown"></div>
       </div>
@@ -210,7 +211,7 @@
   </section>
 
   <!-- 댓글 입력 폼 -->
-  <section id="rsvp" class="wrap section card">
+  <!-- <section id="rsvp" class="wrap section card">
     <div class="comment-container">
     <h2>댓글</h2>
     <p class="muted" style="margin-top:0">다양한 의견 댓글로 적어주세요.</p>
@@ -218,15 +219,37 @@
             <input type="text" id="comment-input" placeholder="댓글을 입력하세요" required>
             <button type="submit">등록</button>
         </form>
-        
+         -->
         <!-- 댓글 목록 -->
-        <ul id="comment-list">
+        <!-- <ul id="comment-list"> -->
             <!-- 댓글 아이템이 여기에 동적으로 추가됩니다 -->
-        </ul>
+        <!-- </ul>
     </div>
 
     <script src="script.js"></script>
-	</section>
+	</section> -->
+
+	<!-- 댓글 영역 -->
+<section id="comments" class="card" style="margin-top:24px;">
+  <h2>축하 댓글 💌</h2>
+  <div id="comment-list"
+       style="display:flex;flex-direction:column;gap:10px;margin:12px 0;"></div>
+
+  <form id="comment-form" style="display:flex;gap:8px;flex-wrap:wrap;">
+    <input id="comment-nick" placeholder="이름"
+           style="flex:0 0 140px;padding:10px;border-radius:10px;border:1px solid #ddd">
+    <input id="comment-body" placeholder="축하 메시지를 남겨주세요"
+           style="flex:1 1 180px;padding:10px;border-radius:10px;border:1px solid #ddd">
+    <button style="padding:10px 16px;border-radius:10px;border:none;
+                   background:#f19cb4;color:#fff;font-weight:600;cursor:pointer;">
+      보내기
+    </button>
+  </form>
+
+  <p style="color:#999;font-size:12px;margin-top:6px;">
+    남겨주신 축하 메시지는 페이지에 저장되어 모두 함께 볼 수 있어요 ✨
+  </p>
+</section>
   <!-- RSVP -->
   <section id="rsvp" class="wrap section card">
     <h2>참석 의사 전달</h2>
@@ -336,48 +359,80 @@
       petal.style.height = petal.style.width;
       document.body.appendChild(petal);
     }
+	</script>
+	<!-- Supabase JS -->
+	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+	<script
+	// ==== 1) 댓글 설정값 ====
+	<!-- const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";   // ← 교체 -->
+	const SUPABASE_URL = "https://tyevryexhncxfubnkjoe.supabase.co";   // ← 교체
+	const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5ZXZyeWV4aG5jeGZ1Ym5ram9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMwMTE3MDgsImV4cCI6MjA3ODU4NzcwOH0.Z635FtXmHkWu_FxnZI3eJy_e3cZZ05KErw1i4-JlejU";          // ← 교체
+	const PAGE_ID = "miyoung_wedding";                         // 페이지 식별자
 
-	document.addEventListener('DOMContentLoaded', () => {
-    const commentForm = document.getElementById('comment-form');
-    const commentInput = document.getElementById('comment-input');
-    const commentList = document.getElementById('comment-list');
+	const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+	const $list = document.getElementById("comment-list");
+	const $form = document.getElementById("comment-form");
+	const $nick = document.getElementById("comment-nick");
+	const $body = document.getElementById("comment-body");
 
-    // 로컬 스토리지에서 댓글 불러오기
-    function loadComments() {
-        // "comments" 키로 저장된 댓글 데이터를 JSON 형식으로 가져옴
-        const comments = JSON.parse(localStorage.getItem('comments')) || [];
-        commentList.innerHTML = ''; // 목록 초기화
-        comments.forEach(commentText => {
-            addCommentToDOM(commentText);
-        });
-    }
+	const esc = (s) =>
+		s.replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-    // DOM에 댓글 추가
-    function addCommentToDOM(commentText) {
-        const li = document.createElement('li');
-        li.textContent = commentText;
-        commentList.appendChild(li);
-    }
+	function renderComment(item, prepend=false) {
+		const el = document.createElement("div");
+		el.style.cssText =
+		"padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #eee;";
 
-    // 폼 제출 시 댓글 저장 및 화면 갱신
-    commentForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const newComment = commentInput.value.trim();
+		const t = new Date(item.created_at);
+		el.innerHTML = `
+		<strong>${esc(item.nickname || "Guest")}</strong>
+		<span style="color:#999;font-size:12px;margin-left:6px;">
+			${t.toLocaleString()}
+		</span>
+		<div style="margin-top:6px;">${esc(item.body)}</div>
+		`;
+		prepend ? $list.prepend(el) : $list.append(el);
+	}
 
-        if (newComment) {
-            // 로컬 스토리지에 저장된 댓글 배열 가져오기
-            const comments = JSON.parse(localStorage.getItem('comments')) || [];
-            comments.push(newComment); // 새 댓글 추가
-            localStorage.setItem('comments', JSON.stringify(comments)); // 다시 저장
+	// ==== 2) 초기 댓글 불러오기 ====
+	(async () => {
+		const { data, error } = await sb
+		.from("comments")
+		.select("*")
+		.eq("page_id", PAGE_ID)
+		.order("created_at", { ascending: true })
+		.limit(200);
 
-            addCommentToDOM(newComment); // 화면에 추가
-            commentInput.value = ''; // 입력창 비우기
-        }
-    });
+		if (error) {
+		console.error(error);
+		return;
+		}
+		data.forEach(renderComment);
+	})();
 
-    // 페이지 로드 시 댓글 불러오기
-    loadComments();
-});
+	// ==== 3) 실시간 새 댓글 구독 ====
+	sb.channel("comments-stream")
+		.on(
+		"postgres_changes",
+		{ event: "INSERT", schema: "public", table: "comments", filter: `page_id=eq.${PAGE_ID}` },
+		(payload) => renderComment(payload.new)
+		)
+		.subscribe();
+
+	// ==== 4) 댓글 전송 ====
+	$form.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		const nickname = ($nick.value || "Guest").slice(0, 24);
+		const body = ($body.value || "").trim();
+		if (!body) return;
+
+		// 낙관적 렌더 (바로 화면에 보여주기)
+		const temp = { nickname, body, created_at: new Date().toISOString() };
+		renderComment(temp, true);
+		$body.value = "";
+
+		await sb.from("comments").insert({ page_id: PAGE_ID, nickname, body });
+	});
   </script>
 </body>
 </html>
